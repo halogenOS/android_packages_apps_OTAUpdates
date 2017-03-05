@@ -20,18 +20,17 @@ TARGET_ARCH_ABI := armeabi-v7a
 endif
 
 # Cardview Dir
-cardview_dir := ../../../frameworks/support/v7/cardview
+cardview_dir := $(LOCAL_PATH)/../../../frameworks/support/v7/cardview
 
-src_dirs := src src_bypass
-res_dirs := res $(chips_dir) $(cardview_dir)/res
-
-LOCAL_SRC_FILES := $(call all-java-files-under, $(src_dirs))
-LOCAL_RESOURCE_DIR := $(addprefix $(LOCAL_PATH)/, $(res_dirs))
+LOCAL_MANIFEST_FILE := app/src/main/AndroidManifest.xml
+LOCAL_SRC_FILES := $(call all-java-files-under, app/src/main)
+LOCAL_RESOURCE_DIR := $(LOCAL_PATH)/app/src/main/res
+LOCAL_RESOURCE_DIR += $(cardview_dir)/res
 
 LOCAL_AAPT_FLAGS := \
 	--auto-add-overlay \
 	--extra-packages android.support.v7.cardview \
-    --extra-packages android.support.v4
+        --extra-packages android.support.v4
 
 LOCAL_PACKAGE_NAME := OTAUpdates
 
@@ -45,16 +44,13 @@ LOCAL_STATIC_JAVA_LIBRARIES := \
 LOCAL_JNI_SHARED_LIBRARIES := libbypass
 
 LOCAL_CERTIFICATE := platform
-
 LOCAL_PRIVILEGED_MODULE := true
-
 LOCAL_PROGUARD_ENABLED := disabled
-
 include $(BUILD_PACKAGE)
 
 include $(CLEAR_VARS)
 
-LOCAL_PREBUILT_STATIC_JAVA_LIBRARIES := libs/RootTools.jar
+LOCAL_PREBUILT_STATIC_JAVA_LIBRARIES := app/libs/RootTools.jar
 
 include $(BUILD_MULTI_PREBUILT)
 
