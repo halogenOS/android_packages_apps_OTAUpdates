@@ -128,22 +128,14 @@ public class AppReceiver extends BroadcastReceiver implements Constants{
 					if (DEBUGGING)
 						Log.w(TAG, "Download Failed");
 					Preferences.setDownloadFinished(context, false);
-					if (Utils.isLollipop()) {
-						AvailableActivity.setupMenuToolbar(context); // Reset options menu
-					} else {
-						AvailableActivity.invalidateMenu();
-					}
+					AvailableActivity.setupMenuToolbar(context); // Reset options menu
 					return;
 				} else {
 					if (DEBUGGING)
 						Log.v(TAG, "Download Succeeded");
 					Preferences.setDownloadFinished(context, true);
 					AvailableActivity.setupProgress(context);
-					if (Utils.isLollipop()) {
-						AvailableActivity.setupMenuToolbar(context); // Reset options menu
-					} else {
-						AvailableActivity.invalidateMenu();
-					}
+					AvailableActivity.setupMenuToolbar(context); // Reset options menu
 					return;
 				}
 			}

@@ -101,7 +101,6 @@ public class Preferences implements Constants{
 	public static int getCurrentTheme(Context context) {
 		Boolean isDefaultThemeUsed = Utils.doesPropExist(OTA_DEFAULT_THEME);
 		String getDefTheme = Utils.getProp(OTA_DEFAULT_THEME);
-		Boolean isLollipop = Utils.isLollipop();
 
 		// Has a a default theme been set by the developer?
 		if(isDefaultThemeUsed && !getDefTheme.isEmpty()) {
@@ -109,10 +108,10 @@ public class Preferences implements Constants{
 			if(!(defThemeInt < 0 || defThemeInt > 2)) {
 				return Integer.parseInt(getPrefs(context).getString(CURRENT_THEME, getDefTheme));
 			} else {
-				return normalTheme(context, isLollipop);
+				return normalTheme(context, true);
 			}
 		} else {
-			return normalTheme(context, isLollipop);
+			return normalTheme(context, true);
 		}
 	}
 
@@ -125,46 +124,31 @@ public class Preferences implements Constants{
 	}
 
 	public static int getTheme(Context context) {
-		boolean isLollipop = Utils.isLollipop();
 		switch(getCurrentTheme(context))
 		{
 		case 0:
 			return R.style.Theme_RagnarLight;
 		case 1:
-			// Lollipop doesn't have a DarkActionBar theme
-			if (isLollipop) {
-				return R.style.Theme_RagnarLight;
-			} else {
-				return R.style.Theme_RagnarLight_DarkActionBar;
-			}
+			return R.style.Theme_RagnarLight_DarkActionBar;
 		case 2:
 			return R.style.Theme_RagnarDark;
 		default:
-			if (isLollipop) {
-				return R.style.Theme_RagnarLight;
-			} else {
-				return R.style.Theme_RagnarDark;
-			}
+			return R.style.Theme_RagnarDark;
 		}
 	}
 
 	public static int getSettingsTheme(Context context)
     {       
-        switch(getCurrentTheme(context))
-        {
-        case 0:
-            return R.style.Theme_RagnarLight_Settings;
-        case 1:
-            return R.style.Theme_RagnarLight_DarkActionBar_Settings;
-        case 2:
-            return R.style.Theme_RagnarDark_Settings;
-        default:
-        	if (Utils.isLollipop()) {
-        		return R.style.Theme_RagnarLight_Settings;
-        	} else {
-        		return R.style.Theme_RagnarDark_Settings;
-        	}
-        }
+        switch(getCurrentTheme(context)) {
+			case 0:
+				return R.style.Theme_RagnarLight_Settings;
+			case 1:
+				return R.style.Theme_RagnarLight_DarkActionBar_Settings;
+			case 2:
+				return R.style.Theme_RagnarDark_Settings;
+			default:
+				return R.style.Theme_RagnarDark_Settings;
+		}
     }
 
 	public static String getIgnoredRelease(Context context) {

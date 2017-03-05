@@ -59,16 +59,13 @@ public class AddonActivity extends Activity implements Constants {
 	public void onCreate(Bundle savedInstanceState) {
 		mContext = this;
 		setTheme(Preferences.getTheme(mContext));
-		boolean isLollipop = Utils.isLollipop();
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.ota_addons);
 
-		if (isLollipop) {
-			Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_addons);
-			setActionBar(toolbar);
-			toolbar.setTitle(getResources().getString(R.string.app_name));
-		}
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_addons);
+		setActionBar(toolbar);
+		toolbar.setTitle(getResources().getString(R.string.app_name));
 
 		mListview = (ListView) findViewById(R.id.listview);
 		mDownloadAddon = new DownloadAddon();

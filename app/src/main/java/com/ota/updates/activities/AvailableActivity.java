@@ -81,29 +81,25 @@ public class AvailableActivity extends Activity implements Constants, android.vi
 		super.onCreate(savedInstanceState);          
 		setContentView(R.layout.ota_available);
 
-		if (Utils.isLollipop()) {
-			Toolbar toolbarBottom = (Toolbar) findViewById(R.id.toolbar_available_bottom);
-			toolbarBottom.setTitle("");
-		}
+        Toolbar toolbarBottom = (Toolbar) findViewById(R.id.toolbar_available_bottom);
+        toolbarBottom.setTitle("");
 
 		mDownloadRom = new DownloadRom();
 
 		mProgressBar = (ProgressBar) findViewById(R.id.bar_available_progress_bar);
 		mProgressCounterText = (TextView) findViewById(R.id.tv_available_progress_counter);
 
-		if (Utils.isLollipop()) {
-			mCheckMD5Button = (Button) findViewById(R.id.menu_available_check_md5);
-			mDeleteButton = (Button) findViewById(R.id.menu_available_delete);
-			mInstallButton = (Button) findViewById(R.id.menu_available_install);
-			mDownloadButton = (Button) findViewById(R.id.menu_available_download);
-			mCancelButton = (Button) findViewById(R.id.menu_available_cancel);
+        mCheckMD5Button = (Button) findViewById(R.id.menu_available_check_md5);
+        mDeleteButton = (Button) findViewById(R.id.menu_available_delete);
+        mInstallButton = (Button) findViewById(R.id.menu_available_install);
+        mDownloadButton = (Button) findViewById(R.id.menu_available_download);
+        mCancelButton = (Button) findViewById(R.id.menu_available_cancel);
 
-			mCheckMD5Button.setOnClickListener(this);
-			mDeleteButton.setOnClickListener(this);
-			mInstallButton.setOnClickListener(this);
-			mDownloadButton.setOnClickListener(this);
-			mCancelButton.setOnClickListener(this);
-		}
+        mCheckMD5Button.setOnClickListener(this);
+        mDeleteButton.setOnClickListener(this);
+        mInstallButton.setOnClickListener(this);
+        mDownloadButton.setOnClickListener(this);
+        mCancelButton.setOnClickListener(this);
 
 		setupDialogs();
 		setupUpdateNameInfo();
@@ -111,9 +107,7 @@ public class AvailableActivity extends Activity implements Constants, android.vi
 		setupMd5Info();
 		setupRomHut();
 		setupChangeLog();
-		if (Utils.isLollipop()) {
-			setupMenuToolbar(mContext);
-		}
+        setupMenuToolbar(mContext);
 
 		if (Preferences.getIsDownloadOnGoing(mContext)) {
 			// If the activity has already been run, and the download started 
@@ -269,11 +263,8 @@ public class AvailableActivity extends Activity implements Constants, android.vi
 				setupUpdateNameInfo(); // Update name info
 				setupProgress(mContext); // Progress goes back to 0
 				setupMd5Info(); // MD5 goes back to default
-				if (Utils.isLollipop()) {
-					setupMenuToolbar(mContext); // Reset options menu
-				} else {
-					invalidateMenu();
-				}
+                setupMenuToolbar(mContext); // Reset options menu
+
 			}
 		}).setNegativeButton(R.string.cancel, null);
 
@@ -377,17 +368,13 @@ public class AvailableActivity extends Activity implements Constants, android.vi
 			TextView domainTextView = (TextView) findViewById(R.id.tv_available_romhut);
 			String sponsoredBy = isRomHut ?  "Sponsored by " : "";
 			domainTextView.setText(String.format("%s%s", sponsoredBy, domainText));
-			if (Utils.isLollipop()) {	
-				int color;
-				if (Preferences.getCurrentTheme(mContext) == 0) { // Light
-					color = getResources().getColor(R.color.material_deep_teal_500);
-				} else {
-					color = getResources().getColor(R.color.material_deep_teal_200);
-				}
-				domainTextView.setTextColor(color);
-			} else {
-				domainTextView.setTextColor(getResources().getColor(R.color.holo_blue_light));
-			}
+            int color;
+            if (Preferences.getCurrentTheme(mContext) == 0) { // Light
+                color = getResources().getColor(R.color.material_deep_teal_500);
+            } else {
+                color = getResources().getColor(R.color.material_deep_teal_200);
+            }
+            domainTextView.setTextColor(color);
 		}
 	}
 
@@ -397,17 +384,14 @@ public class AvailableActivity extends Activity implements Constants, android.vi
 		String downloading = getResources().getString(R.string.available_downloading);
 		String filename = RomUpdate.getVersionName(mContext);
 
-		if (Utils.isLollipop()) {
-			int color;
-			if (Preferences.getCurrentTheme(mContext) == 0) { // Light
-				color = getResources().getColor(R.color.material_deep_teal_500);
-			} else {
-				color = getResources().getColor(R.color.material_deep_teal_200);
-			}
-			updateNameInfoText.setTextColor(color);
-		} else {
-			updateNameInfoText.setTextColor(getResources().getColor(R.color.holo_blue_light));
-		}
+        int color;
+        if (Preferences.getCurrentTheme(mContext) == 0) { // Light
+            color = getResources().getColor(R.color.material_deep_teal_500);
+        } else {
+            color = getResources().getColor(R.color.material_deep_teal_200);
+        }
+        updateNameInfoText.setTextColor(color);
+
 
 		if (isDownloadOnGoing) {
 			updateNameInfoText.setText(downloading); 	
@@ -456,11 +440,8 @@ public class AvailableActivity extends Activity implements Constants, android.vi
 					Log.d(TAG, "Downloading via DownloadManager");
 				mDownloadRom.startDownload(mContext);
 				setupUpdateNameInfo();
-				if (Utils.isLollipop()) {
-					setupMenuToolbar(mContext); // Reset options menu
-				} else {
-					invalidateMenu();
-				}
+                setupMenuToolbar(mContext); // Reset options menu
+
 			} else {
 				if (DEBUGGING)
 					Log.e(TAG, "No links found");
@@ -479,14 +460,12 @@ public class AvailableActivity extends Activity implements Constants, android.vi
 				Log.d(TAG, "Download finished. Setting up Progress Bars accordingly.");
 			String ready = context.getResources().getString(R.string.available_ready_to_install);
 
-			int color = res.getColor(R.color.holo_blue_light);
-			if (Utils.isLollipop()) {
-				if (Preferences.getCurrentTheme(context) == 0) { // Light
-					color = context.getResources().getColor(R.color.material_deep_teal_500);
-				} else {
-					color = context.getResources().getColor(R.color.material_deep_teal_200);
-				}		
-			} 
+			int color;
+            if (Preferences.getCurrentTheme(context) == 0) { // Light
+                color = context.getResources().getColor(R.color.material_deep_teal_500);
+            } else {
+                color = context.getResources().getColor(R.color.material_deep_teal_200);
+            }
 			if(mProgressCounterText != null) {
 				mProgressCounterText.setTextColor(color);
 				mProgressCounterText.setText(ready);
@@ -563,11 +542,8 @@ public class AvailableActivity extends Activity implements Constants, android.vi
 			}
 
 			Preferences.setMD5Passed(mContext, result); // Set value for other persistent settings
-			if (Utils.isLollipop()) {
-				setupMenuToolbar(mContext); // Reset options menu
-			} else {
-				invalidateMenu();
-			}
+            setupMenuToolbar(mContext); // Reset options menu
+
 			super.onPostExecute(result);
 		}
 	}

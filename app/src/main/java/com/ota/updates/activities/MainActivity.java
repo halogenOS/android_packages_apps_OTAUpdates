@@ -93,29 +93,13 @@ public class MainActivity extends Activity implements Constants{
 
 		mContext = this;
 		setTheme(Preferences.getTheme(mContext));
-		isLollipop = Utils.isLollipop();
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.ota_main);
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
+		setActionBar(toolbar);
+		toolbar.setTitle(getResources().getString(R.string.app_name));
 
-		if (isLollipop) {
-			Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
-			setActionBar(toolbar);
-			toolbar.setTitle(getResources().getString(R.string.app_name));
-		} else {
-			// Custom ActionBar view
-			ActionBar actionBar = getActionBar();
-			assert actionBar != null;
-			actionBar.setTitle(R.string.app_name);
-			LayoutParams layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT,
-					LayoutParams.WRAP_CONTENT,
-					Gravity.END |
-					Gravity.CENTER_VERTICAL);
-			View actionbarView = LayoutInflater.from(this).inflate(R.layout.ota_main_actionbar_top, null);
-			actionBar.setCustomView(actionbarView, layoutParams);
-			actionBar.setDisplayShowCustomEnabled(true);
-		}
-		
 		boolean firstRun = Preferences.getFirstRun(mContext);				
 		if(firstRun) {
 			Preferences.setFirstRun(mContext, false);
