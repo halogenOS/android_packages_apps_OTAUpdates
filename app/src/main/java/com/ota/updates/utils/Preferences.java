@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2015 Matt Booth (Kryten2k35).
  *
- * Licensed under the Attribution-NonCommercial-ShareAlike 4.0 International 
+ * Licensed under the Attribution-NonCommercial-ShareAlike 4.0 International
  * (the "License") you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -108,47 +108,24 @@ public class Preferences implements Constants{
 			if(!(defThemeInt < 0 || defThemeInt > 2)) {
 				return Integer.parseInt(getPrefs(context).getString(CURRENT_THEME, getDefTheme));
 			} else {
-				return normalTheme(context, true);
+				return normalTheme(context);
 			}
 		} else {
-			return normalTheme(context, true);
+			return normalTheme(context);
 		}
 	}
 
-	private static int normalTheme(Context context, Boolean isLollipop) {
-		if (isLollipop) {
-			return Integer.parseInt(getPrefs(context).getString(CURRENT_THEME, THEME_LIGHT));
-		} else {
-			return Integer.parseInt(getPrefs(context).getString(CURRENT_THEME, THEME_DARK));
-		}
+	private static int normalTheme(Context context) {
+		return Integer.parseInt(getPrefs(context).getString(CURRENT_THEME, THEME_LIGHT));
 	}
 
 	public static int getTheme(Context context) {
-		switch(getCurrentTheme(context))
-		{
-		case 0:
-			return R.style.Theme_RagnarLight;
-		case 1:
-			return R.style.Theme_RagnarLight_DarkActionBar;
-		case 2:
-			return R.style.Theme_RagnarDark;
-		default:
-			return R.style.Theme_RagnarDark;
-		}
+		return R.style.Theme_RagnarDark;
 	}
 
 	public static int getSettingsTheme(Context context)
-    {       
-        switch(getCurrentTheme(context)) {
-			case 0:
-				return R.style.Theme_RagnarLight_Settings;
-			case 1:
-				return R.style.Theme_RagnarLight_DarkActionBar_Settings;
-			case 2:
-				return R.style.Theme_RagnarDark_Settings;
-			default:
-				return R.style.Theme_RagnarDark_Settings;
-		}
+    {
+        return R.style.Theme_RagnarDark_Settings;
     }
 
 	public static String getIgnoredRelease(Context context) {

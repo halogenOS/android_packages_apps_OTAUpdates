@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2015 Matt Booth (Kryten2k35).
  *
- * Licensed under the Attribution-NonCommercial-ShareAlike 4.0 International 
+ * Licensed under the Attribution-NonCommercial-ShareAlike 4.0 International
  * (the "License") you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -67,8 +67,6 @@ public class MainActivity extends Activity implements Constants{
 	private Builder mCompatibilityDialog;
 	private Builder mDonateDialog;
 	private Builder mPlayStoreDialog;
-
-	private boolean isLollipop;
 
 	public static ProgressBar mProgressBar;
 
@@ -166,15 +164,13 @@ public class MainActivity extends Activity implements Constants{
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		if (isLollipop)
-			getMenuInflater().inflate(R.menu.ota_menu_main, menu);
+		getMenuInflater().inflate(R.menu.ota_menu_main, menu);
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection
-		if (isLollipop)
 			switch (item.getItemId()) {
 			case R.id.menu_changelog:
 				openChangelog(null);
@@ -282,16 +278,7 @@ public class MainActivity extends Activity implements Constants{
 
 			if (Preferences.getDownloadFinished(mContext)) { //  Update already finished?
 				updateAvailableTitle.setText(getResources().getString(R.string.main_update_finished));
-				String htmlColorOpen;
-				if (isLollipop) {
-					if (Preferences.getCurrentTheme(mContext) == 0) { // Light
-						htmlColorOpen = "<font color='#009688'>";
-					} else {
-						htmlColorOpen = "<font color='#80cbc4'>";
-					}
-				} else {
-					htmlColorOpen = "<font color='#33b5e5'>";
-				}
+				String htmlColorOpen = "<font color='#33b5e5'>";
 				String htmlColorClose = "</font>";
 				String updateSummary = RomUpdate.getVersionName(mContext)
 						+ "<br />"
@@ -303,15 +290,7 @@ public class MainActivity extends Activity implements Constants{
 				updateAvailableTitle.setText(getResources().getString(R.string.main_update_progress));
 				mProgressBar.setVisibility(View.VISIBLE);
 				String htmlColorOpen;
-				if (isLollipop) {
-					if (Preferences.getCurrentTheme(mContext) == 0) { // Light
-						htmlColorOpen = "<font color='#009688'>";
-					} else {
-						htmlColorOpen = "<font color='#80cbc4'>";
-					}
-				} else {
-					htmlColorOpen = "<font color='#33b5e5'>";
-				}
+				htmlColorOpen = "<font color='#33b5e5'>";
 				String htmlColorClose = "</font>";
 				String updateSummary = htmlColorOpen
 						+ getResources().getString(R.string.main_tap_to_view_progress)
@@ -320,15 +299,7 @@ public class MainActivity extends Activity implements Constants{
 			} else {
 				updateAvailableTitle.setText(getResources().getString(R.string.main_update_available));
 				String htmlColorOpen;
-				if (isLollipop) {
-					if (Preferences.getCurrentTheme(mContext) == 0) { // Light
-						htmlColorOpen = "<font color='#009688'>";
-					} else {
-						htmlColorOpen = "<font color='#80cbc4'>";
-					}
-				} else {
-					htmlColorOpen = "<font color='#33b5e5'>";
-				}
+				htmlColorOpen = "<font color='#33b5e5'>";
 				String htmlColorClose = "</font>";
 				String updateSummary = RomUpdate.getVersionName(mContext)
 						+ "<br />"
@@ -371,7 +342,7 @@ public class MainActivity extends Activity implements Constants{
 		CardView donateLink = (CardView) findViewById(R.id.layout_main_dev_donate_link);
 		donateLink.setVisibility(View.GONE);
 
-		if (!(RomUpdate.getDonateLink(mContext).trim().equals("null")) 
+		if (!(RomUpdate.getDonateLink(mContext).trim().equals("null"))
 				|| !(RomUpdate.getBitCoinLink(mContext).trim().equals("null"))) {
 			donateLink.setVisibility(View.VISIBLE);
 		}
@@ -388,15 +359,7 @@ public class MainActivity extends Activity implements Constants{
 
 	private void updateRomInformation() {
 		String htmlColorOpen;
-		if (isLollipop) {
-			if (Preferences.getCurrentTheme(mContext) == 0) { // Light
-				htmlColorOpen = "<font color='#009688'>";
-			} else {
-				htmlColorOpen = "<font color='#80cbc4'>";
-			}
-		} else {
-			htmlColorOpen = "<font color='#33b5e5'>";
-		}
+		htmlColorOpen = "<font color='#33b5e5'>";
 		String htmlColorClose = "</font>";
 
 		//ROM name
