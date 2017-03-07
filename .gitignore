@@ -13,3 +13,7 @@ proguard-project.txt
 project.properties
 app/build
 build
+*.iml
+.gradle/
+.idea/
+app/.externalNativeBuild/
