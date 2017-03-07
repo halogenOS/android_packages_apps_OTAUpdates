@@ -2,6 +2,7 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
+APP_ALLOW_MISSING_DEPS=true
 LOCAL_MODULE	:= libbypass
 LOCAL_MODULE_TAGS := optional
 
