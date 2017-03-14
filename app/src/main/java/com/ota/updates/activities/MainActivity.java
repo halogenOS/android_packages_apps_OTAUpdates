@@ -419,11 +419,27 @@ public class MainActivity extends Activity implements Constants{
 			mDonateDialog.show();
 		} else if (payPalLinkAvailable) {
 			String url = RomUpdate.getDonateLink(mContext);
+			if (url != null){
+				final Uri uri = Uri.parse(url);
+				if (uri.getScheme() == null){
+					url = "http://" + url;
+				}
+			} else {
+				return;
+			}
 			Intent intent = new Intent(Intent.ACTION_VIEW);
 			intent.setData(Uri.parse(url));
 			startActivity(intent);
 		} else {
 			String url = RomUpdate.getBitCoinLink(mContext);
+			if (url != null){
+				final Uri uri = Uri.parse(url);
+				if (uri.getScheme() == null){
+					url = "http://" + url;
+				}
+			} else {
+				return;
+			}
 			Intent intent = new Intent(Intent.ACTION_VIEW);
 			intent.setData(Uri.parse(url));
 			startActivity(intent);
@@ -432,6 +448,14 @@ public class MainActivity extends Activity implements Constants{
 
 	public void openWebsitePage(View v) {
 		String url = RomUpdate.getWebsite(mContext);
+		if (url != null){
+			final Uri uri = Uri.parse(url);
+			if (uri.getScheme() == null){
+				url = "http://" + url;
+			}
+		} else {
+			return;
+		}
 		Intent intent = new Intent(Intent.ACTION_VIEW);
 		intent.setData(Uri.parse(url));
 		startActivity(intent);
