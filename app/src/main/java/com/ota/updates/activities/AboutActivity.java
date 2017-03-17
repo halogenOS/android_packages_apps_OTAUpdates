@@ -39,22 +39,22 @@ import java.util.ArrayList;
 
 public class AboutActivity extends Activity {
 
-	private Context mContext;
+    private Context mContext;
 
-	@SuppressLint("NewApi") @Override
-	protected void onCreate(Bundle savedInstanceState) {
-		mContext = this;
-		setTheme(Preferences.getTheme(mContext));
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.ota_about);
-
-
-		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_about);
-		setActionBar(toolbar);
-		toolbar.setTitle(getResources().getString(R.string.app_name));
+    @SuppressLint("NewApi") @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        mContext = this;
+        setTheme(Preferences.getTheme(mContext));
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.ota_about);
 
 
-		CardView creditsView = (CardView) findViewById(R.id.credits_cardview);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_about);
+        setActionBar(toolbar);
+        toolbar.setTitle(getResources().getString(R.string.app_name));
+
+
+        CardView creditsView = (CardView) findViewById(R.id.credits_cardview);
         creditsView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -77,31 +77,31 @@ public class AboutActivity extends Activity {
             }
         });
         TextView versionSummary = (TextView) findViewById(R.id.about_tv_version_summary);
-		String appVer = getResources().getString(R.string.about_app_version);
-		String appVerActual = getResources().getString(R.string.app_version);
-		versionSummary.setText(appVer + " v" + appVerActual);
+        String appVer = getResources().getString(R.string.about_app_version);
+        String appVerActual = getResources().getString(R.string.app_version);
+        versionSummary.setText(appVer + " v" + appVerActual);
         versionSummary.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openChangelog(view);
             }
         });
-	}
+    }
 
-	public void openChangelog(View v) {
-		String title = getResources().getString(R.string.changelog);
-		String changelog = getResources().getString(R.string.changelog_url);
-		new Changelog(this, mContext, title, changelog, true).execute();
-	}
+    public void openChangelog(View v) {
+        String title = getResources().getString(R.string.changelog);
+        String changelog = getResources().getString(R.string.changelog_url);
+        new Changelog(this, mContext, title, changelog, true).execute();
+    }
 
-	public ArrayList<CreditsItem> getListData(){
+    public ArrayList<CreditsItem> getListData(){
         ArrayList<CreditsItem> returnedArray = new ArrayList<>();
         returnedArray.add(new CreditsItem("Matthew Booth","Anything not mentioned below"));
-				returnedArray.add(new CreditsItem("Harsh Shandilya","Nougat bringup and code cleanup"));
-				returnedArray.add(new CreditsItem("Roman Nurik","Android Asset Studio Framework"));
-				// TODO: Use libsuperuser for root functions or simply eliminate root usage
-				returnedArray.add(new CreditsItem("Ficeto (AllianceROM)","Root Tools"));
-				returnedArray.add(new CreditsItem("StackOverflow","Many many people"));
+                returnedArray.add(new CreditsItem("Harsh Shandilya","Nougat bringup and code cleanup"));
+                returnedArray.add(new CreditsItem("Roman Nurik","Android Asset Studio Framework"));
+                // TODO: Use libsuperuser for root functions or simply eliminate root usage
+                returnedArray.add(new CreditsItem("Ficeto (AllianceROM)","Root Tools"));
+                returnedArray.add(new CreditsItem("StackOverflow","Many many people"));
 
         return returnedArray;
 

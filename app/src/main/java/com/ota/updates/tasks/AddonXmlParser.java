@@ -15,10 +15,10 @@ import com.ota.updates.utils.Constants;
 
 public class AddonXmlParser extends DefaultHandler implements Constants {
 
-	private final static String TAG = "AddonXmlParser";
+    private final static String TAG = "AddonXmlParser";
 
-	public static ArrayList<Addon> parse(File xmlFile) {
-		ArrayList<Addon> addons = null;
+    public static ArrayList<Addon> parse(File xmlFile) {
+        ArrayList<Addon> addons = null;
         try {
             SAXParserFactory xmlReader = SAXParserFactory.newInstance();
             SAXParser saxParser = xmlReader.newSAXParser();

@@ -17,27 +17,27 @@ import android.text.SpannableStringBuilder;
  */
 public class ReverseSpannableStringBuilder extends SpannableStringBuilder {
 
-	@Override
-	public <T> T[] getSpans(int queryStart, int queryEnd, Class<T> kind) {
-		T[] ret = super.getSpans(queryStart, queryEnd, kind);
-		reverse(ret);
-		return ret;
-	}
+    @Override
+    public <T> T[] getSpans(int queryStart, int queryEnd, Class<T> kind) {
+        T[] ret = super.getSpans(queryStart, queryEnd, kind);
+        reverse(ret);
+        return ret;
+    }
 
-	private static void reverse(Object[] arr) {
-		if (arr == null) {
-			return;
-		}
+    private static void reverse(Object[] arr) {
+        if (arr == null) {
+            return;
+        }
 
-		int i = 0;
-		int j = arr.length - 1;
-		Object tmp;
-		while (j > i) {
-			tmp = arr[j];
-			arr[j] = arr[i];
-			arr[i] = tmp;
-			j--;
-			i++;
-		}
-	}
+        int i = 0;
+        int j = arr.length - 1;
+        Object tmp;
+        while (j > i) {
+            tmp = arr[j];
+            arr[j] = arr[i];
+            arr[i] = tmp;
+            j--;
+            i++;
+        }
+    }
 }

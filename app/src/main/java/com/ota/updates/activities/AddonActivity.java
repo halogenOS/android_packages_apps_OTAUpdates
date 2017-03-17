@@ -49,308 +49,308 @@ import com.ota.updates.utils.Utils;
 
 public class AddonActivity extends Activity implements Constants {
 
-	public final static String TAG = "AddonActivity";
+    public final static String TAG = "AddonActivity";
 
-	public static Context mContext;
-	private static ListView mListview;
-	private static DownloadAddon mDownloadAddon;
+    public static Context mContext;
+    private static ListView mListview;
+    private static DownloadAddon mDownloadAddon;
 
-	@SuppressLint("NewApi") @Override
-	public void onCreate(Bundle savedInstanceState) {
-		mContext = this;
-		setTheme(Preferences.getTheme(mContext));
+    @SuppressLint("NewApi") @Override
+    public void onCreate(Bundle savedInstanceState) {
+        mContext = this;
+        setTheme(Preferences.getTheme(mContext));
 
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.ota_addons);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.ota_addons);
 
-		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_addons);
-		setActionBar(toolbar);
-		toolbar.setTitle(getResources().getString(R.string.app_name));
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_addons);
+        setActionBar(toolbar);
+        toolbar.setTitle(getResources().getString(R.string.app_name));
 
-		mListview = (ListView) findViewById(R.id.listview);
-		mDownloadAddon = new DownloadAddon();
-		
-		String isRomhut = "";
-		
-		String urlDomain = RomUpdate.getUrlDomain(mContext);
-		if(!urlDomain.equals("null")) {
-			isRomhut = urlDomain.contains("romhut.com") ? "?order_by=name&order_direction=asc" : "";
-		}
-		
-		new LoadAddonManifest(mContext).execute(RomUpdate.getAddonsUrl(mContext) + isRomhut);
-	}
+        mListview = (ListView) findViewById(R.id.listview);
+        mDownloadAddon = new DownloadAddon();
 
-	public void setupListView(ArrayList<Addon> addonsList) {		
-		final AddonsArrayAdapter adapter = new AddonsArrayAdapter(mContext, addonsList);
-		if(mListview != null) {
-			mListview.setAdapter(adapter);
-		}
-	}
+        String isRomhut = "";
 
-	private class LoadAddonManifest extends AsyncTask<Object, Void, ArrayList<Addon>> {
+        String urlDomain = RomUpdate.getUrlDomain(mContext);
+        if(!urlDomain.equals("null")) {
+            isRomhut = urlDomain.contains("romhut.com") ? "?order_by=name&order_direction=asc" : "";
+        }
 
-		public final String TAG = this.getClass().getSimpleName();
+        new LoadAddonManifest(mContext).execute(RomUpdate.getAddonsUrl(mContext) + isRomhut);
+    }
 
-		private static final String MANIFEST = "addon_manifest.xml";
+    public void setupListView(ArrayList<Addon> addonsList) {
+        final AddonsArrayAdapter adapter = new AddonsArrayAdapter(mContext, addonsList);
+        if(mListview != null) {
+            mListview.setAdapter(adapter);
+        }
+    }
 
-		private ProgressDialog mLoadingDialog;
+    private class LoadAddonManifest extends AsyncTask<Object, Void, ArrayList<Addon>> {
 
-		private Context mContext;
-		
-		LoadAddonManifest(Context context) {
-			mContext = context;
-		}
-		
-		@Override
-		protected void onPreExecute(){
+        public final String TAG = this.getClass().getSimpleName();
 
-			// Show a loading/progress dialog while the search is being performed
-			mLoadingDialog = new ProgressDialog(mContext);
-			mLoadingDialog.setIndeterminate(true);
-			mLoadingDialog.setCancelable(false);
-			mLoadingDialog.setMessage(mContext.getResources().getString(R.string.loading));
-			mLoadingDialog.show();
+        private static final String MANIFEST = "addon_manifest.xml";
 
-			// Delete any existing manifest file before we attempt to download a new one
-			File manifest = new File(mContext.getFilesDir().getPath(), MANIFEST);
-			if(manifest.exists()) {
-				if (!manifest.delete()) Log.e(TAG,"Manifest deletion failed");
-			}
-		}
+        private ProgressDialog mLoadingDialog;
 
-		@Override
-		protected ArrayList<Addon> doInBackground(Object... param) {
+        private Context mContext;
 
-			try {
-				InputStream input;
+        LoadAddonManifest(Context context) {
+            mContext = context;
+        }
 
-				URL url = new URL((String) param[0]);
-				URLConnection connection = url.openConnection();
-				connection.connect();
-				// download the file
-				input = new BufferedInputStream(url.openStream());
+        @Override
+        protected void onPreExecute(){
 
-				OutputStream output = mContext.openFileOutput(
-						MANIFEST, Context.MODE_PRIVATE);
+            // Show a loading/progress dialog while the search is being performed
+            mLoadingDialog = new ProgressDialog(mContext);
+            mLoadingDialog.setIndeterminate(true);
+            mLoadingDialog.setCancelable(false);
+            mLoadingDialog.setMessage(mContext.getResources().getString(R.string.loading));
+            mLoadingDialog.show();
 
-				byte data[] = new byte[1024];
-				int count;
-				while ((count = input.read(data)) != -1) {
-					output.write(data, 0, count);
-				}
+            // Delete any existing manifest file before we attempt to download a new one
+            File manifest = new File(mContext.getFilesDir().getPath(), MANIFEST);
+            if(manifest.exists()) {
+                if (!manifest.delete()) Log.e(TAG,"Manifest deletion failed");
+            }
+        }
 
-				output.flush();
-				output.close();
-				input.close();
+        @Override
+        protected ArrayList<Addon> doInBackground(Object... param) {
 
-				// file finished downloading, parse it!
-				return AddonXmlParser.parse(new File(mContext.getFilesDir(), MANIFEST));
-			} catch (Exception e) {
-				Log.d(TAG, "Exception: " + e.getMessage());
-			}
-			return null;
-		}
+            try {
+                InputStream input;
 
-		@Override
-		protected void onPostExecute(ArrayList<Addon> result) {
-			mLoadingDialog.cancel();
-			if(result != null) {
-				setupListView(result);
-			}
-			super.onPostExecute(result);
-		}
-	}
+                URL url = new URL((String) param[0]);
+                URLConnection connection = url.openConnection();
+                connection.connect();
+                // download the file
+                input = new BufferedInputStream(url.openStream());
 
-	public static class AddonsArrayAdapter extends ArrayAdapter<Addon> {
+                OutputStream output = mContext.openFileOutput(
+                        MANIFEST, Context.MODE_PRIVATE);
 
-		AddonsArrayAdapter(Context context, ArrayList<Addon> users) {
-			super(context, 0, users);
-		}
+                byte data[] = new byte[1024];
+                int count;
+                while ((count = input.read(data)) != -1) {
+                    output.write(data, 0, count);
+                }
 
-		public static void updateProgress(int index, int progress, boolean finished) {
-			View v = mListview.getChildAt(index - 
-					mListview.getFirstVisiblePosition());
+                output.flush();
+                output.close();
+                input.close();
 
-			if(v == null) {
-				return;
-			}
+                // file finished downloading, parse it!
+                return AddonXmlParser.parse(new File(mContext.getFilesDir(), MANIFEST));
+            } catch (Exception e) {
+                Log.d(TAG, "Exception: " + e.getMessage());
+            }
+            return null;
+        }
 
-			ProgressBar progressBar = (ProgressBar) v.findViewById(R.id.progress_bar);
+        @Override
+        protected void onPostExecute(ArrayList<Addon> result) {
+            mLoadingDialog.cancel();
+            if(result != null) {
+                setupListView(result);
+            }
+            super.onPostExecute(result);
+        }
+    }
 
-			if (finished) {
-				progressBar.setProgress(0);
-			} else {
-				progressBar.setProgress(progress);
-				if(DEBUGGING) {
-					Log.d(TAG, "Setting Progress as " + progress); 
-				}
-			}
-		}
+    public static class AddonsArrayAdapter extends ArrayAdapter<Addon> {
 
-		public static void updateButtons(int index, boolean finished) {
-			View v = mListview.getChildAt((index - 1) - 
-					mListview.getFirstVisiblePosition());
+        AddonsArrayAdapter(Context context, ArrayList<Addon> users) {
+            super(context, 0, users);
+        }
 
-			if(v == null) {
-				return;
-			}
+        public static void updateProgress(int index, int progress, boolean finished) {
+            View v = mListview.getChildAt(index -
+                    mListview.getFirstVisiblePosition());
 
-			final Button download = (Button) v.findViewById(R.id.download_button);
-			final Button cancel = (Button) v.findViewById(R.id.cancel_button);
-			final Button delete = (Button) v.findViewById(R.id.delete_button);
+            if(v == null) {
+                return;
+            }
 
-			if (finished) {
-				download.setVisibility(View.VISIBLE);
-				download.setText(mContext.getResources().getString(R.string.finished));
-				download.setClickable(false);
-				delete.setVisibility(View.VISIBLE);
-				cancel.setVisibility(View.GONE);
-			} else {
-				download.setVisibility(View.VISIBLE);
-				download.setText(mContext.getResources().getString(R.string.download));
-				download.setClickable(true);
-				cancel.setVisibility(View.GONE);
-				delete.setVisibility(View.GONE);
-			}
-		}
-		
-		private void showNetworkDialog() {
-			Builder mNetworkDialog = new Builder(mContext);
-			mNetworkDialog.setTitle(R.string.available_wrong_network_title)
-			.setMessage(R.string.available_wrong_network_message)
-			.setPositiveButton(R.string.ok, null)
-			.setNeutralButton(R.string.settings, new DialogInterface.OnClickListener() {
+            ProgressBar progressBar = (ProgressBar) v.findViewById(R.id.progress_bar);
 
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					Intent intent = new Intent(mContext, SettingsActivity.class);
-					mContext.startActivity(intent);
-				}
-			});
-			
-			mNetworkDialog.show();
-		}
-		
-		private void deleteConfirm(final File file, final Addon item) {
-			Builder deleteConfirm = new Builder(mContext);
-			deleteConfirm.setTitle(R.string.delete);
-			deleteConfirm.setMessage(mContext.getResources().getString(R.string.delete_confirm) + "\n\n" + file.getName());
-			deleteConfirm.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-				
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					if (file.exists()) {
-						if (!file.delete()) Log.e(TAG,"File Deletion failed");
-						updateButtons(item.getId(), false);
-					}
-				}
-			});
-			deleteConfirm.setNegativeButton(R.string.cancel, null);
-			deleteConfirm.show();
-		}
+            if (finished) {
+                progressBar.setProgress(0);
+            } else {
+                progressBar.setProgress(progress);
+                if(DEBUGGING) {
+                    Log.d(TAG, "Setting Progress as " + progress);
+                }
+            }
+        }
 
-		@NonNull
-		@Override
-		public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-			final Addon item = getItem(position);    
-			final int index = position;
-			if (convertView == null) {
-				convertView = LayoutInflater.from(getContext()).inflate(R.layout.card_addons_list_item, parent, false);
-			}
+        public static void updateButtons(int index, boolean finished) {
+            View v = mListview.getChildAt((index - 1) -
+                    mListview.getFirstVisiblePosition());
 
-			TextView title = (TextView) convertView.findViewById(R.id.title);
-			TextView desc = (TextView) convertView.findViewById(R.id.description);
-			TextView updatedOn = (TextView) convertView.findViewById(R.id.updatedOn);
-			TextView filesize = (TextView) convertView.findViewById(R.id.size);
-			final Button download = (Button) convertView.findViewById(R.id.download_button);
-			final Button cancel = (Button) convertView.findViewById(R.id.cancel_button);
-			final Button delete = (Button) convertView.findViewById(R.id.delete_button);
+            if(v == null) {
+                return;
+            }
 
-			assert item != null;
-			title.setText(item.getTitle());
+            final Button download = (Button) v.findViewById(R.id.download_button);
+            final Button cancel = (Button) v.findViewById(R.id.cancel_button);
+            final Button delete = (Button) v.findViewById(R.id.delete_button);
 
-			Bypass byPass = new Bypass(mContext);
-			String descriptionStr = item.getDesc();
-			CharSequence string = byPass.markdownToSpannable(descriptionStr);
-			desc.setText(string);
-			desc.setMovementMethod(LinkMovementMethod.getInstance());
+            if (finished) {
+                download.setVisibility(View.VISIBLE);
+                download.setText(mContext.getResources().getString(R.string.finished));
+                download.setClickable(false);
+                delete.setVisibility(View.VISIBLE);
+                cancel.setVisibility(View.GONE);
+            } else {
+                download.setVisibility(View.VISIBLE);
+                download.setText(mContext.getResources().getString(R.string.download));
+                download.setClickable(true);
+                cancel.setVisibility(View.GONE);
+                delete.setVisibility(View.GONE);
+            }
+        }
 
-			String UpdatedOnStr = convertView.getResources().getString(R.string.addons_updated_on);
-			String date = item.getPublishedAt();
+        private void showNetworkDialog() {
+            Builder mNetworkDialog = new Builder(mContext);
+            mNetworkDialog.setTitle(R.string.available_wrong_network_title)
+            .setMessage(R.string.available_wrong_network_message)
+            .setPositiveButton(R.string.ok, null)
+            .setNeutralButton(R.string.settings, new DialogInterface.OnClickListener() {
 
-			Locale locale = Locale.getDefault();
-			DateFormat fromDate = new SimpleDateFormat("yyyy-MM-dd", locale);
-			DateFormat toDate = new SimpleDateFormat("dd, MMMM yyyy", locale);
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(mContext, SettingsActivity.class);
+                    mContext.startActivity(intent);
+                }
+            });
 
-			try {
-				date = toDate.format(fromDate.parse(date));
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
+            mNetworkDialog.show();
+        }
 
-			updatedOn.setText(UpdatedOnStr + " " + date);
+        private void deleteConfirm(final File file, final Addon item) {
+            Builder deleteConfirm = new Builder(mContext);
+            deleteConfirm.setTitle(R.string.delete);
+            deleteConfirm.setMessage(mContext.getResources().getString(R.string.delete_confirm) + "\n\n" + file.getName());
+            deleteConfirm.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 
-			filesize.setText(Utils.formatDataFromBytes(item.getFilesize()));
-			final File file = new File(SD_CARD
-					+ File.separator
-					+ OTA_DOWNLOAD_DIR, item.getTitle() + ".zip");
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (file.exists()) {
+                        if (!file.delete()) Log.e(TAG,"File Deletion failed");
+                        updateButtons(item.getId(), false);
+                    }
+                }
+            });
+            deleteConfirm.setNegativeButton(R.string.cancel, null);
+            deleteConfirm.show();
+        }
 
-			if (DEBUGGING) {
-				Log.d(TAG, "file path " + file.getAbsolutePath());
-				Log.d(TAG, "file length " + file.length() + " remoteLength " +  item.getFilesize());
-			}
-			boolean finished = file.length() == item.getFilesize();
-			if (finished) {
-				download.setVisibility(View.VISIBLE);
-				download.setText(mContext.getResources().getString(R.string.finished));
-				download.setClickable(false);
-				delete.setVisibility(View.VISIBLE);
-				cancel.setVisibility(View.GONE);
-			} else {
-				download.setVisibility(View.VISIBLE);
-				download.setText(mContext.getResources().getString(R.string.download));
-				download.setClickable(true);
-				cancel.setVisibility(View.GONE);
-				delete.setVisibility(View.GONE);
-			}
+        @NonNull
+        @Override
+        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+            final Addon item = getItem(position);
+            final int index = position;
+            if (convertView == null) {
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.card_addons_list_item, parent, false);
+            }
 
-			download.setOnClickListener(new OnClickListener() {
+            TextView title = (TextView) convertView.findViewById(R.id.title);
+            TextView desc = (TextView) convertView.findViewById(R.id.description);
+            TextView updatedOn = (TextView) convertView.findViewById(R.id.updatedOn);
+            TextView filesize = (TextView) convertView.findViewById(R.id.size);
+            final Button download = (Button) convertView.findViewById(R.id.download_button);
+            final Button cancel = (Button) convertView.findViewById(R.id.cancel_button);
+            final Button delete = (Button) convertView.findViewById(R.id.delete_button);
 
-				@Override
-				public void onClick(View v) {
-					boolean isMobile = Utils.isMobileNetwork(mContext);
-					boolean isSettingWiFiOnly = Preferences.getNetworkType(mContext).equals(WIFI_ONLY);
+            assert item != null;
+            title.setText(item.getTitle());
 
-					if (isMobile && isSettingWiFiOnly) {
-						showNetworkDialog();
-					} else {
-						mDownloadAddon.startDownload(mContext, item.getDownloadLink(), item.getTitle(), item.getId(), index);
-						download.setVisibility(View.GONE);
-						cancel.setVisibility(View.VISIBLE);
-					}
-				}
-			});
+            Bypass byPass = new Bypass(mContext);
+            String descriptionStr = item.getDesc();
+            CharSequence string = byPass.markdownToSpannable(descriptionStr);
+            desc.setText(string);
+            desc.setMovementMethod(LinkMovementMethod.getInstance());
 
-			cancel.setOnClickListener(new OnClickListener() {
+            String UpdatedOnStr = convertView.getResources().getString(R.string.addons_updated_on);
+            String date = item.getPublishedAt();
 
-				@Override
-				public void onClick(View v) {
-					mDownloadAddon.cancelDownload(mContext, index);
-					download.setVisibility(View.VISIBLE);
-					cancel.setVisibility(View.GONE);
-					updateProgress(index, 0, true);
-				}
-			});
+            Locale locale = Locale.getDefault();
+            DateFormat fromDate = new SimpleDateFormat("yyyy-MM-dd", locale);
+            DateFormat toDate = new SimpleDateFormat("dd, MMMM yyyy", locale);
 
-			delete.setOnClickListener(new OnClickListener() {
+            try {
+                date = toDate.format(fromDate.parse(date));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
-				@Override
-				public void onClick(View v) {
-					deleteConfirm(file, item);					
-				}
-			});
+            updatedOn.setText(UpdatedOnStr + " " + date);
 
-			return convertView;
-		}
-	}
+            filesize.setText(Utils.formatDataFromBytes(item.getFilesize()));
+            final File file = new File(SD_CARD
+                    + File.separator
+                    + OTA_DOWNLOAD_DIR, item.getTitle() + ".zip");
+
+            if (DEBUGGING) {
+                Log.d(TAG, "file path " + file.getAbsolutePath());
+                Log.d(TAG, "file length " + file.length() + " remoteLength " +  item.getFilesize());
+            }
+            boolean finished = file.length() == item.getFilesize();
+            if (finished) {
+                download.setVisibility(View.VISIBLE);
+                download.setText(mContext.getResources().getString(R.string.finished));
+                download.setClickable(false);
+                delete.setVisibility(View.VISIBLE);
+                cancel.setVisibility(View.GONE);
+            } else {
+                download.setVisibility(View.VISIBLE);
+                download.setText(mContext.getResources().getString(R.string.download));
+                download.setClickable(true);
+                cancel.setVisibility(View.GONE);
+                delete.setVisibility(View.GONE);
+            }
+
+            download.setOnClickListener(new OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    boolean isMobile = Utils.isMobileNetwork(mContext);
+                    boolean isSettingWiFiOnly = Preferences.getNetworkType(mContext).equals(WIFI_ONLY);
+
+                    if (isMobile && isSettingWiFiOnly) {
+                        showNetworkDialog();
+                    } else {
+                        mDownloadAddon.startDownload(mContext, item.getDownloadLink(), item.getTitle(), item.getId(), index);
+                        download.setVisibility(View.GONE);
+                        cancel.setVisibility(View.VISIBLE);
+                    }
+                }
+            });
+
+            cancel.setOnClickListener(new OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    mDownloadAddon.cancelDownload(mContext, index);
+                    download.setVisibility(View.VISIBLE);
+                    cancel.setVisibility(View.GONE);
+                    updateProgress(index, 0, true);
+                }
+            });
+
+            delete.setOnClickListener(new OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    deleteConfirm(file, item);
+                }
+            });
+
+            return convertView;
+        }
+    }
 }
