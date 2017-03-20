@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2015 Matt Booth (Kryten2k35).
+ * Copyright (C) 2017 The halogenOS Project.
  *
  * Licensed under the Attribution-NonCommercial-ShareAlike 4.0 International
  * (the "License") you may not use this file except in compliance with the License.
@@ -16,8 +17,6 @@
 
 package com.ota.updates.activities;
 
-import android.app.ActionBar;
-import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -32,11 +31,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
-import android.text.Html;
 import android.text.format.DateFormat;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,7 +40,6 @@ import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toolbar;
-
 import com.ota.updates.R;
 import com.ota.updates.RomUpdate;
 import com.ota.updates.tasks.Changelog;
@@ -62,13 +57,13 @@ public class MainActivity extends Activity implements Constants{
 
     public final String TAG = this.getClass().getSimpleName();
 
-    private static Context mContext;
+    private Context mContext;
 
     private Builder mCompatibilityDialog;
     private Builder mDonateDialog;
     private Builder mPlayStoreDialog;
 
-    public static ProgressBar mProgressBar;
+    public ProgressBar mProgressBar;
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -90,8 +85,6 @@ public class MainActivity extends Activity implements Constants{
     public void onCreate(Bundle savedInstanceState) {
 
         mContext = this;
-        setTheme(Preferences.getTheme(mContext));
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ota_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
@@ -133,6 +126,7 @@ public class MainActivity extends Activity implements Constants{
                     ((Activity) mContext).finish();
                 }
             })
+            .setCancelable(false)
             .show();
         } else {
             new CompatibilityTask(mContext).execute();
@@ -195,7 +189,7 @@ public class MainActivity extends Activity implements Constants{
 
         // Donate Dialog
         mDonateDialog = new AlertDialog.Builder(this);
-        String[] donateItems = { "PayPal", "BitCoin" };
+        String[] donateItems = { "PayPal" };
         mDonateDialog.setTitle(getResources().getString(R.string.donate))
         .setSingleChoiceItems(donateItems, 0, null)
         .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
@@ -203,14 +197,20 @@ public class MainActivity extends Activity implements Constants{
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String url;
+                Intent intent = new Intent(Intent.ACTION_VIEW);
                 int selectedPosition = ((AlertDialog)dialog).getListView().getCheckedItemPosition();
                 if (selectedPosition == 0) {
                     url = RomUpdate.getDonateLink(mContext);
-                } else {
-                    url = RomUpdate.getBitCoinLink(mContext);
+                    if (url != null){
+                        final Uri uri = Uri.parse(url);
+                        if (uri.getScheme() == null){
+                            url = "http://" + url;
+                        }
+                    } else {
+                        return;
+                    }
+                    intent.setData(Uri.parse(url));
                 }
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse(url));
 
                 try {
                     startActivity(intent);
@@ -275,35 +275,21 @@ public class MainActivity extends Activity implements Constants{
 
             if (Preferences.getDownloadFinished(mContext)) { //  Update already finished?
                 updateAvailableTitle.setText(getResources().getString(R.string.main_update_finished));
-                String htmlColorOpen = "<font color='#33b5e5'>";
-                String htmlColorClose = "</font>";
                 String updateSummary = RomUpdate.getVersionName(mContext)
-                        + "<br />"
-                        + htmlColorOpen
-                        + getResources().getString(R.string.main_download_completed_details)
-                        + htmlColorClose;
-                updateAvailableSummary.setText(Html.fromHtml(updateSummary));
+                        + "\n\n"
+                        + getResources().getString(R.string.main_download_completed_details);
+                updateAvailableSummary.setText(updateSummary);
             } else if (Preferences.getIsDownloadOnGoing(mContext)) {
                 updateAvailableTitle.setText(getResources().getString(R.string.main_update_progress));
                 mProgressBar.setVisibility(View.VISIBLE);
-                String htmlColorOpen;
-                htmlColorOpen = "<font color='#33b5e5'>";
-                String htmlColorClose = "</font>";
-                String updateSummary = htmlColorOpen
-                        + getResources().getString(R.string.main_tap_to_view_progress)
-                        + htmlColorClose;
-                updateAvailableSummary.setText(Html.fromHtml(updateSummary));
+                String updateSummary = getResources().getString(R.string.main_tap_to_view_progress);
+                updateAvailableSummary.setText(updateSummary);
             } else {
                 updateAvailableTitle.setText(getResources().getString(R.string.main_update_available));
-                String htmlColorOpen;
-                htmlColorOpen = "<font color='#33b5e5'>";
-                String htmlColorClose = "</font>";
                 String updateSummary = RomUpdate.getVersionName(mContext)
-                        + "<br />"
-                        + htmlColorOpen
-                        + getResources().getString(R.string.main_tap_to_download)
-                        + htmlColorClose;
-                updateAvailableSummary.setText(Html.fromHtml(updateSummary));
+                        + "\n\n"
+                        + getResources().getString(R.string.main_tap_to_download);
+                updateAvailableSummary.setText(updateSummary);
 
             }
         } else {
@@ -339,8 +325,7 @@ public class MainActivity extends Activity implements Constants{
         CardView donateLink = (CardView) findViewById(R.id.layout_main_dev_donate_link);
         donateLink.setVisibility(View.GONE);
 
-        if (!(RomUpdate.getDonateLink(mContext).trim().equals("null"))
-                || !(RomUpdate.getBitCoinLink(mContext).trim().equals("null"))) {
+        if (!(RomUpdate.getDonateLink(mContext).trim().equals("null"))) {
             donateLink.setVisibility(View.VISIBLE);
         }
     }
@@ -355,42 +340,33 @@ public class MainActivity extends Activity implements Constants{
     }
 
     private void updateRomInformation() {
-        String htmlColorOpen;
-        htmlColorOpen = "<font color='#33b5e5'>";
-        String htmlColorClose = "</font>";
 
         //ROM name
         TextView romName = (TextView) findViewById(R.id.tv_main_rom_name);
-        String romNameTitle = getApplicationContext().getResources().getString(R.string.main_rom_name) + " ";
         String romNameActual = Utils.getProp(OTA_ROMNAME);
-        romName.setText(Html.fromHtml(romNameTitle + htmlColorOpen + romNameActual + htmlColorClose));
+        romName.setText(String.format("%s%s", romName.getText(), romNameActual));
 
         //ROM version
         TextView romVersion = (TextView) findViewById(R.id.tv_main_rom_version);
-        String romVersionTitle = getApplicationContext().getResources().getString(R.string.main_rom_version) + " ";
         String romVersionActual = Utils.getProp(OTA_VERSION);
-        romVersion.setText(Html.fromHtml(romVersionTitle + htmlColorOpen + romVersionActual + htmlColorClose));
+        romVersion.setText(String.format("%s%s",romVersion.getText(),romVersionActual));
 
         //ROM date
         TextView romDate = (TextView) findViewById(R.id.tv_main_rom_date);
-        String romDateTitle = getApplicationContext().getResources().getString(R.string.main_rom_build_date) + " ";
         String romDateActual = Utils.getProp("ro.build.date");
-        romDate.setText(Html.fromHtml(romDateTitle + htmlColorOpen + romDateActual + htmlColorClose));
+        romDate.setText(String.format("%s%s", romDate.getText(), romDateActual));
 
         //ROM android version
         TextView romAndroid = (TextView) findViewById(R.id.tv_main_android_version);
-        String romAndroidTitle = getApplicationContext().getResources().getString(R.string.main_android_verison) + " ";
         String romAndroidActual = Utils.getProp("ro.build.version.release");
-        romAndroid.setText(Html.fromHtml(romAndroidTitle + htmlColorOpen + romAndroidActual + htmlColorClose));
+        romAndroid.setText(String.format("%s%s",romAndroid.getText(), romAndroidActual));
 
         //ROM developer
         TextView romDeveloper = (TextView) findViewById(R.id.tv_main_rom_developer);
         boolean showDevName = !RomUpdate.getDeveloper(this).equals("null");
         romDeveloper.setVisibility(showDevName? View.VISIBLE : View.GONE);
-
-        String romDeveloperTitle = getApplicationContext().getResources().getString(R.string.main_rom_developer) + " ";
         String romDeveloperActual = RomUpdate.getDeveloper(this);
-        romDeveloper.setText(Html.fromHtml(romDeveloperTitle + htmlColorOpen + romDeveloperActual + htmlColorClose));
+        romDeveloper.setText(String.format("%s%s",romDeveloper.getText(),romDeveloperActual));
 
     }
 
@@ -411,24 +387,10 @@ public class MainActivity extends Activity implements Constants{
     public void openDonationPage(View v) {
 
         boolean payPalLinkAvailable = RomUpdate.getDonateLink(mContext).trim().equals("null");
-        boolean bitCoinLinkAvailable = RomUpdate.getBitCoinLink(mContext).trim().equals("null");
-        if (!payPalLinkAvailable && !bitCoinLinkAvailable) {
+        if (!payPalLinkAvailable) {
             mDonateDialog.show();
         } else if (payPalLinkAvailable) {
             String url = RomUpdate.getDonateLink(mContext);
-            if (url != null){
-                final Uri uri = Uri.parse(url);
-                if (uri.getScheme() == null){
-                    url = "http://" + url;
-                }
-            } else {
-                return;
-            }
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse(url));
-            startActivity(intent);
-        } else {
-            String url = RomUpdate.getBitCoinLink(mContext);
             if (url != null){
                 final Uri uri = Uri.parse(url);
                 if (uri.getScheme() == null){
@@ -475,7 +437,7 @@ public class MainActivity extends Activity implements Constants{
         new Changelog(this, mContext, title, changelog, true).execute();
     }
 
-    public static void updateProgress(int progress) {
+    public void updateProgress(int progress) {
         if(mProgressBar != null) {
             mProgressBar.setProgress(progress);
         }

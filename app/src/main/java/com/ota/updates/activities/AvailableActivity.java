@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2015 Matt Booth (Kryten2k35).
+ * Copyright (C) 2017 The halogenOS Project.
  *
  * Licensed under the Attribution-NonCommercial-ShareAlike 4.0 International
  * (the "License") you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@
 
 package com.ota.updates.activities;
 
-import in.uncod.android.bypass.Bypass;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -27,7 +27,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -52,24 +51,26 @@ import com.ota.updates.utils.Preferences;
 import com.ota.updates.utils.Tools;
 import com.ota.updates.utils.Utils;
 
+import in.uncod.android.bypass.Bypass;
+
 public class AvailableActivity extends Activity implements Constants, android.view.View.OnClickListener {
 
-    private static Context mContext;
+    private Context mContext;
     public final static String TAG = "AvailableActivity";
 
-    public static ProgressBar mProgressBar;
-    public static TextView mProgressCounterText;
+    public ProgressBar mProgressBar;
+    public TextView mProgressCounterText;
 
     private Builder mDeleteDialog;
     private Builder mRebootDialog;
     private Builder mRebootManualDialog;
     private Builder mNetworkDialog;
 
-    private static Button mCheckMD5Button;
-    private static Button mDeleteButton;
-    private static Button mInstallButton;
-    private static Button mDownloadButton;
-    private static Button mCancelButton;
+    private Button mCheckMD5Button;
+    private Button mDeleteButton;
+    private Button mInstallButton;
+    private Button mDownloadButton;
+    private Button mCancelButton;
 
     private DownloadRom mDownloadRom;
 
@@ -77,7 +78,6 @@ public class AvailableActivity extends Activity implements Constants, android.vi
     @SuppressLint("NewApi") @Override
     protected void onCreate(Bundle savedInstanceState) {
         mContext = this;
-        setTheme(Preferences.getTheme(mContext));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ota_available);
 
@@ -105,7 +105,6 @@ public class AvailableActivity extends Activity implements Constants, android.vi
         setupUpdateNameInfo();
         setupProgress(mContext);
         setupMd5Info();
-        setupRomHut();
         setupChangeLog();
         setupMenuToolbar(mContext);
 
@@ -308,7 +307,7 @@ public class AvailableActivity extends Activity implements Constants, android.vi
         .setPositiveButton(R.string.cancel, null);
     }
 
-    public static void setupMenuToolbar(Context context) {
+    public void setupMenuToolbar(Context context) {
         boolean downloadFinished = Preferences.getDownloadFinished(context);
         boolean downloadIsRunning = Preferences.getIsDownloadOnGoing(context);
         boolean md5HasRun = Preferences.getHasMD5Run(context);
@@ -361,35 +360,13 @@ public class AvailableActivity extends Activity implements Constants, android.vi
         changelogView.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
-    private void setupRomHut() {
-        String domainText = RomUpdate.getUrlDomain(mContext);
-        boolean isRomHut = domainText.contains("romhut.com");
-        if (domainText != null) {
-            TextView domainTextView = (TextView) findViewById(R.id.tv_available_romhut);
-            String sponsoredBy = isRomHut ?  "Sponsored by " : "";
-            domainTextView.setText(String.format("%s%s", sponsoredBy, domainText));
-            int color;
-            if (Preferences.getCurrentTheme(mContext) == 0) { // Light
-                color = getResources().getColor(R.color.material_deep_teal_500);
-            } else {
-                color = getResources().getColor(R.color.material_deep_teal_200);
-            }
-            domainTextView.setTextColor(color);
-        }
-    }
-
     private void setupUpdateNameInfo() {
         boolean isDownloadOnGoing = Preferences.getIsDownloadOnGoing(mContext);
         TextView updateNameInfoText = (TextView) findViewById(R.id.tv_available_update_name);
         String downloading = getResources().getString(R.string.available_downloading);
         String filename = RomUpdate.getVersionName(mContext);
 
-        int color;
-        if (Preferences.getCurrentTheme(mContext) == 0) { // Light
-            color = getResources().getColor(R.color.material_deep_teal_500);
-        } else {
-            color = getResources().getColor(R.color.material_deep_teal_200);
-        }
+        int color = getColor(R.color.material_deep_teal_200);
         updateNameInfoText.setTextColor(color);
 
 
@@ -450,8 +427,7 @@ public class AvailableActivity extends Activity implements Constants, android.vi
         }
     }
 
-    public static void setupProgress(Context context) {
-        Resources res = context.getResources();
+    public void setupProgress(Context context) {
         if (DEBUGGING)
             Log.d(TAG, "Setting up Progress Bars");
         boolean downloadFinished = Preferences.getDownloadFinished(context);
@@ -460,12 +436,7 @@ public class AvailableActivity extends Activity implements Constants, android.vi
                 Log.d(TAG, "Download finished. Setting up Progress Bars accordingly.");
             String ready = context.getResources().getString(R.string.available_ready_to_install);
 
-            int color;
-            if (Preferences.getCurrentTheme(context) == 0) { // Light
-                color = context.getResources().getColor(R.color.material_deep_teal_500);
-            } else {
-                color = context.getResources().getColor(R.color.material_deep_teal_200);
-            }
+            int color = getColor(R.color.material_deep_teal_200);
             if(mProgressCounterText != null) {
                 mProgressCounterText.setTextColor(color);
                 mProgressCounterText.setText(ready);
@@ -487,16 +458,12 @@ public class AvailableActivity extends Activity implements Constants, android.vi
         }
     }
 
-    public static void updateProgress(int progress, int downloaded, int total, Context context) {
-        mProgressBar.setProgress((int) progress);
+    public void updateProgress(int progress, int downloaded, int total) {
+        mProgressBar.setProgress(progress);
         mProgressCounterText.setText(
                 Utils.formatDataFromBytes(downloaded) +
                 "/" +
                 Utils.formatDataFromBytes(total));
-    }
-
-    public static void invalidateMenu() {
-        ((Activity) mContext).invalidateOptionsMenu();
     }
 
     private class MD5Check extends AsyncTask<Object, Boolean, Boolean>{

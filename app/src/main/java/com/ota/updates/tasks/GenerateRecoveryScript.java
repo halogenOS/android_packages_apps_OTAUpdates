@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2015 Matt Booth (Kryten2k35).
+ * Copyright (C) 2017 The halogenOS Project.
  *
  * Licensed under the Attribution-NonCommercial-ShareAlike 4.0 International
  * (the "License") you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@
 
 package com.ota.updates.tasks;
 
-import java.io.File;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -27,6 +27,10 @@ import com.ota.updates.RomUpdate;
 import com.ota.updates.utils.Constants;
 import com.ota.updates.utils.Preferences;
 import com.ota.updates.utils.Tools;
+
+import java.io.File;
+
+import static com.ota.updates.utils.Tools.canWriteORSWithoutRoot;
 
 public class GenerateRecoveryScript extends AsyncTask<Void, String, Boolean> implements Constants {
 
@@ -62,13 +66,16 @@ public class GenerateRecoveryScript extends AsyncTask<Void, String, Boolean> imp
             mScript.append("wipe dalvik").append(NEW_LINE);
         }
 
-        mScript.append("install ")
+        StringBuilder installRom = new StringBuilder()
+                .append("install ")
                 .append(Constants.SD_CARD)
                 .append(File.separator)
                 .append(OTA_DOWNLOAD_DIR)
                 .append(File.separator)
                 .append(mFilename)
                 .append(NEW_LINE);
+        mScript.append(installRom);
+        if (DEBUGGING) Log.d(TAG,installRom.toString());
 
         File installAfterFlashDir = new File(Constants.SD_CARD
                 + File.separator
@@ -79,16 +86,18 @@ public class GenerateRecoveryScript extends AsyncTask<Void, String, Boolean> imp
         File[] filesArr = installAfterFlashDir.listFiles();
         if(filesArr != null && filesArr.length > 0) {
             for (File aFilesArr : filesArr) {
-                mScript.append(NEW_LINE).append("install ").append("/sdcard").append(File.separator).append(OTA_DOWNLOAD_DIR).append(File.separator).append(INSTALL_AFTER_FLASH_DIR).append(File.separator).append(aFilesArr.getName());
+                StringBuilder installAfterFlash = new StringBuilder()
+                        .append(NEW_LINE).append("install ")
+                        .append(Constants.SD_CARD)
+                        .append(File.separator)
+                        .append(OTA_DOWNLOAD_DIR)
+                        .append(File.separator)
+                        .append(INSTALL_AFTER_FLASH_DIR)
+                        .append(File.separator)
+                        .append(aFilesArr.getName());
+                mScript.append(installAfterFlash);
                 if (DEBUGGING)
-                    Log.d(TAG, "install "
-                            + "/sdcard"
-                            + File.separator
-                            + OTA_DOWNLOAD_DIR
-                            + File.separator
-                            + INSTALL_AFTER_FLASH_DIR
-                            + File.separator
-                            + aFilesArr.getName());
+                    Log.d(TAG,installAfterFlash.toString());
             }
         }
 
@@ -99,8 +108,8 @@ public class GenerateRecoveryScript extends AsyncTask<Void, String, Boolean> imp
                     .append(File.separator)
                     .append(OTA_DOWNLOAD_DIR)
                     .append(File.separator)
-                    .append(INSTALL_AFTER_FLASH_DIR).
-                    append(File.separator)
+                    .append(INSTALL_AFTER_FLASH_DIR)
+                    .append(File.separator)
                     .append(mFilename)
                     .append(NEW_LINE);
         }
@@ -110,18 +119,15 @@ public class GenerateRecoveryScript extends AsyncTask<Void, String, Boolean> imp
 
     @Override
     protected Boolean doInBackground(Void... params) {
-        // Try create a dir in the cache folder
-        // Without root
-        String check = Tools.shell("mkdir -p /cache/recovery/; echo $?", false);
 
         // If not 0, then permission was denied
         String SCRIPT_FILE = "/cache/recovery/openrecoveryscript";
-        if(!check.equals("0")) {
+        if(!canWriteORSWithoutRoot()) {
             // Run as root
             Tools.shell("mkdir -p /cache/recovery/; echo $?", true);
             Tools.shell("echo \"" + mScriptOutput + "\" > " + SCRIPT_FILE + "\n", true);
         } else {
-            // Permission was enabled, run without root
+            // Permission was enabled, run without roo
             Tools.shell("echo \"" + mScriptOutput + "\" > " + SCRIPT_FILE + "\n", false);
         }
 

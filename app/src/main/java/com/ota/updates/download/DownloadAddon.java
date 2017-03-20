@@ -1,4 +1,21 @@
+/*
+ * Copyright (C) 2015 Matt Booth (Kryten2k35).
+ * Copyright (C) 2017 The halogenOS Project.
+ *
+ * Licensed under the Attribution-NonCommercial-ShareAlike 4.0 International
+ * (the "License") you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.ota.updates.download;
+
 
 import android.app.DownloadManager;
 import android.content.Context;
@@ -11,7 +28,7 @@ import com.ota.updates.utils.Preferences;
 
 public class DownloadAddon implements Constants {
 
-    public final static String TAG = "DownloadAddon";
+    public final String TAG = getClass().getName();
 
     public DownloadAddon() {
 
@@ -36,7 +53,7 @@ public class DownloadAddon implements Constants {
         DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
         long mDownloadID = downloadManager.enqueue(request);
         OtaUpdates.putAddonDownload(index, mDownloadID);
-        new DownloadAddonProgress(context, downloadManager, index).execute(mDownloadID);
+        new DownloadAddonProgress(downloadManager, index).execute(mDownloadID);
         if (DEBUGGING) {
             Log.d(TAG, "Starting download with manager ID " + mDownloadID + " and item id of " + id);
         }

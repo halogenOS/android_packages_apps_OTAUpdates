@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015 Matt Booth (Kryten2k35).
- * Copyright (C) 2017 The halogenOS Project
+ * Copyright (C) 2017 The halogenOS Project.
  *
  * Licensed under the Attribution-NonCommercial-ShareAlike 4.0 International
  * (the "License") you may not use this file except in compliance with the License.
@@ -32,7 +32,6 @@ import com.ota.updates.R;
 import com.ota.updates.adapters.CreditsAdapter;
 import com.ota.updates.tasks.Changelog;
 import com.ota.updates.types.CreditsItem;
-import com.ota.updates.utils.Preferences;
 
 import java.util.ArrayList;
 
@@ -44,7 +43,6 @@ public class AboutActivity extends Activity {
     @SuppressLint("NewApi") @Override
     protected void onCreate(Bundle savedInstanceState) {
         mContext = this;
-        setTheme(Preferences.getTheme(mContext));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ota_about);
 

@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2015 Matt Booth (Kryten2k35).
+ * Copyright (C) 2017 The halogenOS Project.
  *
  * Licensed under the Attribution-NonCommercial-ShareAlike 4.0 International
  * (the "License") you may not use this file except in compliance with the License.
@@ -14,15 +15,16 @@
  * limitations under the License.
  */
 
+
 package com.ota.updates;
 
-
-import java.io.File;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.ota.updates.utils.Constants;
+
+import java.io.File;
 
 public class RomUpdate implements Constants {
 
@@ -30,18 +32,15 @@ public class RomUpdate implements Constants {
 
     private static final String PREF_NAME = "ROMUpdate";
 
-    private static String NAME = "rom_name";
     private static String VERSION_NAME = "rom_version_name";
     private static String VERSION_NUMBER = "rom_version_number";
     private static String DIRECT_URL = "rom_direct_url";
     private static String HTTP_URL = "rom_http_url";
     private static String MD5 = "rom_md5";
     private static String CHANGELOG = "rom_changelog";
-    private static String ANDROID = "rom_android_ver";
     private static String WEBSITE = "rom_website";
     private static String DEVELOPER = "rom_developer";
     private static String DONATE_LINK = "rom_donate_link";
-    private static String BTC_LINK = "rom_bitcoin_link";
     private static String FILESIZE = "rom_filesize";
     private static String AVAILABILITY = "update_availability";
     private static String URL_DOMAIN = "rom_url_domain";
@@ -55,10 +54,6 @@ public class RomUpdate implements Constants {
 
     private static SharedPreferences getPrefs(Context context) {
         return context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-    }
-
-    public static String getRomName(Context context) {
-        return getPrefs(context).getString(NAME, DEF_VALUE);
     }
 
     public static String getVersionName(Context context) {
@@ -85,10 +80,6 @@ public class RomUpdate implements Constants {
         return getPrefs(context).getString(CHANGELOG, DEF_VALUE);
     }
 
-    public static String getAndroidVersion(Context context) {
-        return getPrefs(context).getString(ANDROID, DEF_VALUE);
-    }
-
     public static String getWebsite(Context context) {
         return getPrefs(context).getString(WEBSITE, DEF_VALUE);
     }
@@ -99,10 +90,6 @@ public class RomUpdate implements Constants {
 
     public static String getDonateLink(Context context) {
         return getPrefs(context).getString(DONATE_LINK, DEF_VALUE);
-    }
-
-    public static String getBitCoinLink(Context context) {
-        return getPrefs(context).getString(BTC_LINK, DEF_VALUE);
     }
 
     public static int getFileSize(Context context) {
@@ -127,104 +114,100 @@ public class RomUpdate implements Constants {
 
     public static void setRomName(Context context, String name) {
         SharedPreferences.Editor editor = getPrefs(context).edit();
+        String NAME = "rom_name";
         editor.putString(NAME, name);
-        editor.commit();
+        editor.apply();
     }
 
     public static void setVersionName(Context context, String version) {
         SharedPreferences.Editor editor = getPrefs(context).edit();
         editor.putString(VERSION_NAME, version);
-        editor.commit();
+        editor.apply();
     }
 
     public static void setVersionNumber(Context context, int version) {
         SharedPreferences.Editor editor = getPrefs(context).edit();
         editor.putInt(VERSION_NUMBER, version);
-        editor.commit();
+        editor.apply();
     }
 
     public static void setDirectUrl(Context context, String url) {
         SharedPreferences.Editor editor = getPrefs(context).edit();
         editor.putString(DIRECT_URL, url);
-        editor.commit();
+        editor.apply();
     }
 
     public static void setHttpUrl(Context context, String url) {
         SharedPreferences.Editor editor = getPrefs(context).edit();
         editor.putString(HTTP_URL, url);
-        editor.commit();
+        editor.apply();
     }
 
     public static void setMd5(Context context, String md5) {
         SharedPreferences.Editor editor = getPrefs(context).edit();
         editor.putString(MD5, md5);
-        editor.commit();
+        editor.apply();
     }
 
     public static void setChangelog(Context context, String change) {
         SharedPreferences.Editor editor = getPrefs(context).edit();
         editor.putString(CHANGELOG, change);
-        editor.commit();
+        editor.apply();
     }
 
     public static void setAndroidVersion(Context context, String android) {
         SharedPreferences.Editor editor = getPrefs(context).edit();
+        String ANDROID = "rom_android_ver";
         editor.putString(ANDROID, android);
-        editor.commit();
+        editor.apply();
     }
 
     public static void setWebsite(Context context, String website) {
         SharedPreferences.Editor editor = getPrefs(context).edit();
         editor.putString(WEBSITE, website);
-        editor.commit();
+        editor.apply();
     }
 
     public static void setDeveloper(Context context, String developer) {
         SharedPreferences.Editor editor = getPrefs(context).edit();
         editor.putString(DEVELOPER, developer);
-        editor.commit();
+        editor.apply();
     }
 
     public static void setDonateLink(Context context, String donateLink) {
         SharedPreferences.Editor editor = getPrefs(context).edit();
         editor.putString(DONATE_LINK, donateLink);
-        editor.commit();
-    }
-
-    public static void setBitCoinLink(Context context, String donateLink) {
-        SharedPreferences.Editor editor = getPrefs(context).edit();
-        editor.putString(BTC_LINK, donateLink);
-        editor.commit();
+        editor.apply();
     }
 
     public static void setFileSize(Context context, int size) {
         SharedPreferences.Editor editor = getPrefs(context).edit();
         editor.putInt(FILESIZE, size);
-        editor.commit();
+        editor.apply();
     }
 
     public static void setUrlDomain(Context context, String romhut_text) {
         SharedPreferences.Editor editor = getPrefs(context).edit();
         editor.putString(URL_DOMAIN, romhut_text);
-        editor.commit();
+        editor.apply();
     }
 
     public static void setAddonsCount(Context context, int addons_count) {
         SharedPreferences.Editor editor = getPrefs(context).edit();
         editor.putInt(ADDONS_COUNT, addons_count);
-        editor.commit();
+        editor.apply();
     }
 
     public static void setAddonsUrl(Context context, String addons_url) {
         SharedPreferences.Editor editor = getPrefs(context).edit();
         editor.putString(ADDONS_URL, addons_url);
-        editor.commit();
+        editor.apply();
     }
 
     public static void setUpdateAvailable(Context context, boolean availability) {
         SharedPreferences.Editor editor = getPrefs(context).edit();
         editor.putBoolean(AVAILABILITY, availability);
-        editor.commit();
+        editor.apply();
     }
 
     public static String getFilename(Context context) {

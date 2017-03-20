@@ -1,7 +1,8 @@
 /*
  * Copyright (C) 2015 Matt Booth (Kryten2k35).
+ * Copyright (C) 2017 The halogenOS Project.
  *
- * Licensed under the Attribution-NonCommercial-ShareAlike 4.0 International 
+ * Licensed under the Attribution-NonCommercial-ShareAlike 4.0 International
  * (the "License") you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -14,10 +15,8 @@
  * limitations under the License.
  */
 
-package com.ota.updates.receivers;
 
-import java.util.Iterator;
-import java.util.Set;
+package com.ota.updates.receivers;
 
 import android.app.DownloadManager;
 import android.app.NotificationManager;
@@ -35,12 +34,14 @@ import android.util.Log;
 import com.ota.updates.OtaUpdates;
 import com.ota.updates.R;
 import com.ota.updates.RomUpdate;
-import com.ota.updates.activities.AddonActivity;
 import com.ota.updates.activities.AvailableActivity;
 import com.ota.updates.tasks.LoadUpdateManifest;
 import com.ota.updates.utils.Constants;
 import com.ota.updates.utils.Preferences;
 import com.ota.updates.utils.Utils;
+
+import java.util.Iterator;
+import java.util.Set;
 
 public class AppReceiver extends BroadcastReceiver implements Constants{
 
@@ -90,15 +91,17 @@ public class AppReceiver extends BroadcastReceiver implements Constants{
                         Log.w(TAG, "Download Failed");
                     Log.d(TAG, "Removing Addon download with id " + keyForAddonDownload);
                     OtaUpdates.removeAddonDownload(keyForAddonDownload);
-                    AddonActivity.AddonsArrayAdapter.updateProgress(keyForAddonDownload, 0, true);
-                    AddonActivity.AddonsArrayAdapter.updateButtons(keyForAddonDownload, false);
+                    //TODO: Assess the shortcomings of not calling these methods
+                    //AddonActivity.AddonsArrayAdapter.updateProgress(keyForAddonDownload, 0, true);
+                    //AddonActivity.AddonsArrayAdapter.updateButtons(keyForAddonDownload, false);
                     return;
                 } else {
                     if (DEBUGGING)
                         Log.v(TAG, "Download Succeeded");
                     Log.d(TAG, "Removing Addon download with id " + keyForAddonDownload);
                     OtaUpdates.removeAddonDownload(keyForAddonDownload);
-                    AddonActivity.AddonsArrayAdapter.updateButtons(keyForAddonDownload, true);
+                    //TODO: Assess the shortcomings of not calling this method
+                    //AddonActivity.AddonsArrayAdapter.updateButtons(keyForAddonDownload, true);
                     return;
                 }
             } else {
@@ -128,14 +131,16 @@ public class AppReceiver extends BroadcastReceiver implements Constants{
                     if (DEBUGGING)
                         Log.w(TAG, "Download Failed");
                     Preferences.setDownloadFinished(context, false);
-                    AvailableActivity.setupMenuToolbar(context); // Reset options menu
+                    //TODO: Assess the shortcomings of not calling these methods
+                    //AvailableActivity.setupMenuToolbar(context); // Reset options menu
                     return;
                 } else {
                     if (DEBUGGING)
                         Log.v(TAG, "Download Succeeded");
                     Preferences.setDownloadFinished(context, true);
-                    AvailableActivity.setupProgress(context);
-                    AvailableActivity.setupMenuToolbar(context); // Reset options menu
+                    //TODO: Assess the shortcomings of not calling these methods
+                    //AvailableActivity.setupProgress(context);
+                    //AvailableActivity.setupMenuToolbar(context); // Reset options menu
                     return;
                 }
             }

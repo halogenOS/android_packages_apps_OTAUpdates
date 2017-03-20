@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2015 Matt Booth (Kryten2k35).
+ * Copyright (C) 2017 The halogenOS Project.
  *
  * Licensed under the Attribution-NonCommercial-ShareAlike 4.0 International
  * (the "License") you may not use this file except in compliance with the License.
@@ -16,13 +17,6 @@
 
 package com.ota.updates.tasks;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URL;
-import java.net.URLConnection;
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -32,6 +26,13 @@ import android.util.Log;
 import com.ota.updates.R;
 import com.ota.updates.utils.Constants;
 import com.ota.updates.utils.Utils;
+
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
 
 public  class LoadUpdateManifest extends AsyncTask<Void, Void, Void> implements Constants {
 
@@ -74,11 +75,7 @@ public  class LoadUpdateManifest extends AsyncTask<Void, Void, Void> implements 
             InputStream input;
 
             URL url;
-            if (DEBUGGING) {
-                url = new URL("https://romhut.com/roms/aosp-jf/ota.xml");
-            } else {
-                url = new URL(Utils.getProp(Constants.OTA_MANIFEST).trim());
-            }
+            url = new URL(Utils.getProp(Constants.OTA_MANIFEST).trim());
             URLConnection connection = url.openConnection();
             connection.connect();
             // download the file

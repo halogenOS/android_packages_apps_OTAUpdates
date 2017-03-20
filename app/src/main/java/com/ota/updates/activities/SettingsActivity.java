@@ -17,10 +17,7 @@
 
 package com.ota.updates.activities;
 
-import java.io.File;
-
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -31,7 +28,6 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.SwitchPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
@@ -50,6 +46,8 @@ import com.ota.updates.utils.Preferences;
 import com.ota.updates.utils.Tools;
 import com.ota.updates.utils.Utils;
 
+import java.io.File;
+
 @SuppressLint("SdCardPath")
 @SuppressWarnings("deprecation")
 public class SettingsActivity extends PreferenceActivity implements OnPreferenceClickListener, OnPreferenceChangeListener, OnSharedPreferenceChangeListener, Constants{
@@ -58,7 +56,6 @@ public class SettingsActivity extends PreferenceActivity implements OnPreference
     private static final String NOTIFICATIONS_IGNORED_RELEASE = "notifications_ignored_release";
 
     private Context mContext;
-    private Builder mInstallPrefsDialog;
     private Preference mInstallPrefs;
     private Preference mAboutActivity;
     private RingtonePreference mRingtonePreference;
@@ -87,7 +84,7 @@ public class SettingsActivity extends PreferenceActivity implements OnPreference
         String soundValue = getPreferenceManager().getSharedPreferences().getString(NOTIFICATIONS_SOUND, defValue);
         setRingtoneSummary(soundValue);
 
-        if (!Tools.isRootAvailable()) {
+        if (!Tools.canWriteORSWithoutRoot()) {
             SwitchPreference ors = (SwitchPreference) findPreference("updater_twrp_ors");
             ors.setEnabled(false);
         }
@@ -107,7 +104,7 @@ public class SettingsActivity extends PreferenceActivity implements OnPreference
         } else {
             setNotIgnore(false);
         }
-        mStorageLocation = findPreference(STORAGE_LOCATION);
+        Preference mStorageLocation = findPreference(STORAGE_LOCATION);
         mStorageLocation.setSelectable(false);
         String storageLocationStr = SD_CARD + File.separator + OTA_DOWNLOAD_DIR;
         mStorageLocation.setSummary(storageLocationStr);
@@ -200,7 +197,7 @@ public class SettingsActivity extends PreferenceActivity implements OnPreference
         mInstallPrefsItems.put(2, wipeDalvik);
         mInstallPrefsItems.put(3, deleteAfterInstall);
 
-        mInstallPrefsDialog = new AlertDialog.Builder(mContext);
+        Builder mInstallPrefsDialog = new Builder(mContext);
         mInstallPrefsDialog.setTitle(R.string.twrp_ors_install_prefs);
         mInstallPrefsDialog.setMultiChoiceItems(R.array.ors_install_entries, defaultValues,
                 new DialogInterface.OnMultiChoiceClickListener() {

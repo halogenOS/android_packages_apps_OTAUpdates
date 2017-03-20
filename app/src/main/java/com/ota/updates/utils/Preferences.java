@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2015 Matt Booth (Kryten2k35).
+ * Copyright (C) 2017 The halogenOS Project.
  *
  * Licensed under the Attribution-NonCommercial-ShareAlike 4.0 International
  * (the "License") you may not use this file except in compliance with the License.
@@ -96,36 +97,6 @@ public class Preferences implements Constants{
     public static boolean getORSEnabled(Context context) {
         Log.d(TAG, "ORS Enabled Preference " + getPrefs(context).getBoolean(UPDATER_ENABLE_ORS, false));
         return getPrefs(context).getBoolean(UPDATER_ENABLE_ORS, false);
-    }
-
-    public static int getCurrentTheme(Context context) {
-        Boolean isDefaultThemeUsed = Utils.doesPropExist(OTA_DEFAULT_THEME);
-        String getDefTheme = Utils.getProp(OTA_DEFAULT_THEME);
-
-        // Has a a default theme been set by the developer?
-        if(isDefaultThemeUsed && !getDefTheme.isEmpty()) {
-            int defThemeInt = Integer.parseInt(getDefTheme);
-            if(!(defThemeInt < 0 || defThemeInt > 2)) {
-                return Integer.parseInt(getPrefs(context).getString(CURRENT_THEME, getDefTheme));
-            } else {
-                return normalTheme(context);
-            }
-        } else {
-            return normalTheme(context);
-        }
-    }
-
-    private static int normalTheme(Context context) {
-        return Integer.parseInt(getPrefs(context).getString(CURRENT_THEME, THEME_LIGHT));
-    }
-
-    public static int getTheme(Context context) {
-        return R.style.Theme_RagnarDark;
-    }
-
-    public static int getSettingsTheme(Context context)
-    {
-        return R.style.Theme_RagnarDark_Settings;
     }
 
     public static String getIgnoredRelease(Context context) {

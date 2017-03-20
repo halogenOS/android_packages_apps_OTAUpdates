@@ -1,7 +1,8 @@
 /*
  * Copyright (C) 2015 Matt Booth (Kryten2k35).
+ * Copyright (C) 2017 The halogenOS Project.
  *
- * Licensed under the Attribution-NonCommercial-ShareAlike 4.0 International 
+ * Licensed under the Attribution-NonCommercial-ShareAlike 4.0 International
  * (the "License") you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -16,8 +17,6 @@
 
 package com.ota.updates.download;
 
-import java.io.File;
-
 import android.app.DownloadManager;
 import android.content.Context;
 import android.net.Uri;
@@ -28,9 +27,11 @@ import com.ota.updates.utils.Constants;
 import com.ota.updates.utils.Preferences;
 import com.ota.updates.utils.Utils;
 
+import java.io.File;
+
 public class DownloadRom implements Constants {
     
-    public final static String TAG = "DownloadRomUpdate";
+    public final String TAG = getClass().getName();
 
     public DownloadRom() {
         

@@ -1,6 +1,33 @@
+/*
+ * Copyright (C) 2015 Matt Booth (Kryten2k35).
+ * Copyright (C) 2017 The halogenOS Project.
+ *
+ * Licensed under the Attribution-NonCommercial-ShareAlike 4.0 International
+ * (the "License") you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.ota.updates.tasks;
 
-import in.uncod.android.bypass.Bypass;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.os.AsyncTask;
+import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
+
+import com.ota.updates.R;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -12,23 +39,13 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.app.AlertDialog.Builder;
-import android.content.Context;
-import android.os.AsyncTask;
-import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
-
-import com.ota.updates.R;
+import in.uncod.android.bypass.Bypass;
 
 public class Changelog extends AsyncTask<Void, Void, String> {
 
     private ProgressDialog mLoadingDialog;
     private static final String CHANGELOG = "Changelog.md";
-    private static final String TAG = "AboutActivity.Changelog";
+    private final String TAG = getClass().getName();
     private File mChangelogFile;
     private Context mContext;
     private Activity mActivity;

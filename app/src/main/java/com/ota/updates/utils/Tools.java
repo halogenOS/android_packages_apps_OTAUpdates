@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2015 Matt Booth (Kryten2k35).
+ * Copyright (C) 2017 The halogenOS Project.
  *
  * Licensed under the Attribution-NonCommercial-ShareAlike 4.0 International
  * (the "License") you may not use this file except in compliance with the License.
@@ -16,21 +17,23 @@
 
 package com.ota.updates.utils;
 
+import android.content.Context;
+import android.os.Bundle;
+import android.os.Looper;
+import android.os.PowerManager;
+import android.util.Log;
+import android.widget.Toast;
+
+import com.ota.updates.R;
+import com.stericson.RootTools.BuildConfig;
+import com.stericson.RootTools.RootTools;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-
-import android.content.Context;
-import android.os.Bundle;
-import android.os.Looper;
-import android.os.PowerManager;
-import android.util.Log;
-
-import com.stericson.RootTools.BuildConfig;
-import com.stericson.RootTools.RootTools;
 
 public class Tools implements Constants{
 
@@ -59,6 +62,11 @@ public class Tools implements Constants{
             PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
             powerManager.reboot("recovery");
         } catch (Exception e) {
+            Toast.makeText(context, R.string.reboot_without_root_failed,Toast.LENGTH_SHORT).show();
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ignored) {
+            }
             Log.e("Tools", "reboot '"+type+"' error: "+e.getMessage());
             shell("reboot "+type, true);
         }
@@ -76,6 +84,20 @@ public class Tools implements Constants{
             return "su";
         }
         return "sh";
+    }
+
+    public static boolean canWriteORSWithoutRoot(){
+        File recoveryDir = new File("/cache/recovery/");
+        File orsFile = new File("/cache/recovery/openrecoveryscript") ;
+        if (!recoveryDir.exists()){
+            try {
+                return recoveryDir.createNewFile()
+                        && orsFile.canWrite();
+            } catch (IOException ignored) {
+                return false;
+            }
+        }
+        return false;
     }
 
     private static Bundle system(String shell, String command) {

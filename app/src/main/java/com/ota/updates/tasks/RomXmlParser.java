@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2015 Matt Booth (Kryten2k35).
+ * Copyright (C) 2017 The halogenOS Project.
  *
  * Licensed under the Attribution-NonCommercial-ShareAlike 4.0 International
  * (the "License") you may not use this file except in compliance with the License.
@@ -16,6 +17,17 @@
 
 package com.ota.updates.tasks;
 
+import android.content.Context;
+import android.util.Log;
+
+import com.ota.updates.RomUpdate;
+import com.ota.updates.utils.Constants;
+import com.ota.updates.utils.Utils;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -24,17 +36,6 @@ import java.net.URISyntaxException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
-
-import android.content.Context;
-import android.util.Log;
-
-import com.ota.updates.RomUpdate;
-import com.ota.updates.utils.Constants;
-import com.ota.updates.utils.Utils;
 
 class RomXmlParser extends DefaultHandler implements Constants {
 
@@ -54,7 +55,6 @@ class RomXmlParser extends DefaultHandler implements Constants {
     private boolean tagDeveloper = false;
     private boolean tagWebsite = false;
     private boolean tagDonateUrl = false;
-    private boolean tagBitCoinUrl = false;
     private boolean tagFileSize = false;
     private boolean tagAddonsCount = false;
     private boolean tagAddonUrl = false;
@@ -136,10 +136,6 @@ class RomXmlParser extends DefaultHandler implements Constants {
 
         if (qName.equalsIgnoreCase("donateurl")) {
             tagDonateUrl = true;
-        }
-
-        if (qName.equalsIgnoreCase("bitcoinaddress")) {
-            tagBitCoinUrl = true;
         }
 
         if (qName.equalsIgnoreCase("changelog")) {
@@ -262,20 +258,6 @@ class RomXmlParser extends DefaultHandler implements Constants {
             tagDonateUrl = false;
             if (DEBUGGING)
                 Log.d(TAG, "Donate URL = " + input);
-        }
-
-        if (tagBitCoinUrl) {
-            if (input.contains("bitcoin:")) {
-                RomUpdate.setBitCoinLink(mContext, input);
-            } else if (input.isEmpty()) {
-                RomUpdate.setBitCoinLink(mContext, "null");
-            } else {
-                RomUpdate.setBitCoinLink(mContext, "bitcoin:" + input);
-            }
-
-            tagBitCoinUrl = false;
-            if (DEBUGGING)
-                Log.d(TAG, "BitCoin URL = " + input);
         }
 
         if (tagLog) {

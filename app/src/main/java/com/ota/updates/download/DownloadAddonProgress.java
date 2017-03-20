@@ -1,13 +1,29 @@
+/*
+ * Copyright (C) 2015 Matt Booth (Kryten2k35).
+ * Copyright (C) 2017 The halogenOS Project.
+ *
+ * Licensed under the Attribution-NonCommercial-ShareAlike 4.0 International
+ * (the "License") you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.ota.updates.download;
 
-import com.ota.updates.activities.AddonActivity;
-import com.ota.updates.utils.Constants;
 import android.app.DownloadManager;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.ota.updates.utils.Constants;
 
 class DownloadAddonProgress extends AsyncTask<Long, Integer, Void> implements Constants {
     public final String TAG = this.getClass().getSimpleName();
@@ -16,7 +32,7 @@ class DownloadAddonProgress extends AsyncTask<Long, Integer, Void> implements Co
     private boolean mIsRunning = true;
     private int mIndex;
 
-    DownloadAddonProgress(Context context, DownloadManager downloadManager, int index) {
+    DownloadAddonProgress( DownloadManager downloadManager, int index) {
         mDownloadManager = downloadManager;
         mIndex = index;
     }
@@ -66,10 +82,13 @@ class DownloadAddonProgress extends AsyncTask<Long, Integer, Void> implements Co
     protected void onProgressUpdate(Integer... progress) {
         if (DEBUGGING)
             Log.d(TAG, "Updating Progress - " + progress[0] + "%");
+        //TODO: Assess the shortcomings of not calling these methods
+        /*
         if(mIsRunning) {
             AddonActivity.AddonsArrayAdapter.updateProgress(mIndex, progress[0], false);
         } else {
             AddonActivity.AddonsArrayAdapter.updateProgress(mIndex, 0, true);
         }
+        */
     }
 }

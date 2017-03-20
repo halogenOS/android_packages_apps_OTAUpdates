@@ -1,7 +1,8 @@
-/*/*
+/*
  * Copyright (C) 2015 Matt Booth (Kryten2k35).
+ * Copyright (C) 2017 The halogenOS Project.
  *
- * Licensed under the Attribution-NonCommercial-ShareAlike 4.0 International 
+ * Licensed under the Attribution-NonCommercial-ShareAlike 4.0 International
  * (the "License") you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -23,8 +24,6 @@ import android.database.CursorIndexOutOfBoundsException;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.ota.updates.activities.AvailableActivity;
-import com.ota.updates.activities.MainActivity;
 import com.ota.updates.utils.Constants;
 import com.ota.updates.utils.Preferences;
 
@@ -62,7 +61,7 @@ public class DownloadRomProgress  extends AsyncTask<Long, Integer, Void> impleme
                     Preferences.setIsDownloadRunning(mContext, false);
                 }
 
-                final int progressPercent = (int) ((bytesDownloaded * 100l) / bytesInTotal);
+                final int progressPercent = (int) ((bytesDownloaded * 100L) / bytesInTotal);
                 
                 if (progressPercent != previousValue) {
                     // Only publish every 1%, to reduce the amount of work being done.
@@ -83,9 +82,12 @@ public class DownloadRomProgress  extends AsyncTask<Long, Integer, Void> impleme
     protected void onProgressUpdate(Integer... progress) {
         if (DEBUGGING)
             Log.d(TAG, "Updating Progress - " + progress[0] + "%");
+        //TODO: Assess the shortcomings of not calling these methods
+        /*
         if (Preferences.getIsDownloadOnGoing(mContext)) {
             AvailableActivity.updateProgress(progress[0], progress[1], progress[2], mContext);
             MainActivity.updateProgress(progress[0]);
         }
+        */
      }
 }

@@ -1,22 +1,24 @@
+/*
+ * Copyright (C) 2015 Matt Booth (Kryten2k35).
+ * Copyright (C) 2017 The halogenOS Project.
+ *
+ * Licensed under the Attribution-NonCommercial-ShareAlike 4.0 International
+ * (the "License") you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.ota.updates.activities;
-
-import in.uncod.android.bypass.Bypass;
-
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URL;
-import java.net.URLConnection;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Locale;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -47,19 +49,31 @@ import com.ota.updates.utils.Constants;
 import com.ota.updates.utils.Preferences;
 import com.ota.updates.utils.Utils;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Locale;
+
+import in.uncod.android.bypass.Bypass;
+
 public class AddonActivity extends Activity implements Constants {
 
     public final static String TAG = "AddonActivity";
 
-    public static Context mContext;
-    private static ListView mListview;
+    public Context mContext;
+    private ListView mListview;
     private static DownloadAddon mDownloadAddon;
 
     @SuppressLint("NewApi") @Override
     public void onCreate(Bundle savedInstanceState) {
         mContext = this;
-        setTheme(Preferences.getTheme(mContext));
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ota_addons);
 
@@ -161,13 +175,13 @@ public class AddonActivity extends Activity implements Constants {
         }
     }
 
-    public static class AddonsArrayAdapter extends ArrayAdapter<Addon> {
+    public class AddonsArrayAdapter extends ArrayAdapter<Addon> {
 
         AddonsArrayAdapter(Context context, ArrayList<Addon> users) {
             super(context, 0, users);
         }
 
-        public static void updateProgress(int index, int progress, boolean finished) {
+        public void updateProgress(int index, int progress, boolean finished) {
             View v = mListview.getChildAt(index -
                     mListview.getFirstVisiblePosition());
 
@@ -187,7 +201,7 @@ public class AddonActivity extends Activity implements Constants {
             }
         }
 
-        public static void updateButtons(int index, boolean finished) {
+        public void updateButtons(int index, boolean finished) {
             View v = mListview.getChildAt((index - 1) -
                     mListview.getFirstVisiblePosition());
 
