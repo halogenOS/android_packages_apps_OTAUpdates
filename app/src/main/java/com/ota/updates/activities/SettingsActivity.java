@@ -1,7 +1,8 @@
 /*
  * Copyright (C) 2015 Matt Booth (Kryten2k35).
+ * Copyright (C) 2017 The halogenOS Project.
  *
- * Licensed under the Attribution-NonCommercial-ShareAlike 4.0 International 
+ * Licensed under the Attribution-NonCommercial-ShareAlike 4.0 International
  * (the "License") you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -63,13 +64,11 @@ public class SettingsActivity extends PreferenceActivity implements OnPreference
     private RingtonePreference mRingtonePreference;
     private SparseBooleanArray mInstallPrefsItems = new SparseBooleanArray();
     private SwitchPreference mIgnoredRelease;
-    private ListPreference mThemePref;
     private Preference mStorageLocation;
 
     @SuppressLint("NewApi") @Override
     public void onCreate(Bundle savedInstanceState) {
         mContext = this;
-        setTheme(Preferences.getSettingsTheme(mContext));
         super.onCreate(savedInstanceState);
 
         getPreferenceManager().setSharedPreferencesName(Preferences.PREF_NAME);
@@ -83,10 +82,6 @@ public class SettingsActivity extends PreferenceActivity implements OnPreference
         mAboutActivity.setOnPreferenceClickListener(this);
 
         mRingtonePreference = (RingtonePreference) findPreference(NOTIFICATIONS_SOUND);
-
-        mThemePref = (ListPreference) findPreference(CURRENT_THEME);
-        mThemePref.setValue(Integer.toString(Preferences.getCurrentTheme(mContext)));
-        setThemeSummary();
 
         String defValue = android.provider.Settings.System.DEFAULT_NOTIFICATION_URI.toString();
         String soundValue = getPreferenceManager().getSharedPreferences().getString(NOTIFICATIONS_SOUND, defValue);
@@ -138,11 +133,7 @@ public class SettingsActivity extends PreferenceActivity implements OnPreference
             ListPreference listPref = (ListPreference) pref;
             pref.setSummary(listPref.getEntry());
 
-            if (key.equals(CURRENT_THEME)) {
-                Preferences.setTheme(mContext, listPref.getValue());
-                Intent intent = new Intent(mContext, MainActivity.class);
-                startActivity(intent);
-            } else if (key.equals(UPDATER_BACK_FREQ)) {
+            if (key.equals(UPDATER_BACK_FREQ)) {
                 Utils.setBackgroundCheck(mContext, Preferences.getBackgroundService(mContext));
             }
         } else if (pref instanceof SwitchPreference) {
@@ -215,7 +206,7 @@ public class SettingsActivity extends PreferenceActivity implements OnPreference
                 new DialogInterface.OnMultiChoiceClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which,
-                    boolean isChecked) {            
+                    boolean isChecked) {
                 mInstallPrefsItems.put(which, isChecked);
             }
         });
@@ -223,9 +214,9 @@ public class SettingsActivity extends PreferenceActivity implements OnPreference
             @Override
             public void onClick(DialogInterface dialog, int id) {
                 Preferences.setWipeData(mContext, mInstallPrefsItems.get(0));
-                Preferences.setWipeCache(mContext, mInstallPrefsItems.get(1));   
-                Preferences.setWipeDalvik(mContext, mInstallPrefsItems.get(2));   
-                Preferences.setDeleteAfterInstall(mContext, mInstallPrefsItems.get(3));   
+                Preferences.setWipeCache(mContext, mInstallPrefsItems.get(1));
+                Preferences.setWipeDalvik(mContext, mInstallPrefsItems.get(2));
+                Preferences.setDeleteAfterInstall(mContext, mInstallPrefsItems.get(3));
             }
         });
         mInstallPrefsDialog.show();
@@ -238,17 +229,4 @@ public class SettingsActivity extends PreferenceActivity implements OnPreference
                 : getResources().getString(R.string.silent_ringtone));
     }
 
-    private void setThemeSummary() {    
-        int currentTheme = Preferences.getCurrentTheme(mContext);
-        if(DEBUGGING)
-            Log.d(TAG, "Current theme number is" + currentTheme);
-        int id = 0;
-        for (int i = 0; i < mThemePref.getEntryValues().length; i++) {
-            if (mThemePref.getEntryValues()[i].equals(Integer.toString(currentTheme))) {
-                id = i;
-                break;
-            }
-        }
-        mThemePref.setSummary(mThemePref.getEntries()[id]);
-    }
 }
