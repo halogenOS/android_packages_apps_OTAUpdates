@@ -29,7 +29,6 @@
         android:clickable="false">
 
         <TextView
-            android:id="@+id/about_tv_version_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/about_version_title"

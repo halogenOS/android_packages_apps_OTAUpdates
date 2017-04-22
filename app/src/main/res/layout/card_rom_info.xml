@@ -31,7 +31,6 @@
         android:clickable="false">
 
         <TextView
-            android:id="@+id/tv_main_rom_information"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/main_rom_information"
@@ -66,7 +65,7 @@
             android:id="@+id/tv_main_android_version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/main_android_verison"
+            android:text="@string/main_android_version"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="?attr/textColorSecondary" />
 

@@ -96,7 +96,7 @@ public class SettingsActivity extends PreferenceActivity implements OnPreference
         if (!isIgnored) {
             mIgnoredRelease.setSummary(
                     getResources().getString(R.string.notification_ignoring_release) +
-                    " " + 
+                    " " +
                     ignoredRelease);
             mIgnoredRelease.setChecked(true);
             mIgnoredRelease.setEnabled(true);

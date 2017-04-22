@@ -344,22 +344,22 @@ public class MainActivity extends Activity implements Constants{
         //ROM name
         TextView romName = (TextView) findViewById(R.id.tv_main_rom_name);
         String romNameActual = Utils.getProp(OTA_ROMNAME);
-        romName.setText(String.format("%s%s", romName.getText(), romNameActual));
+        romName.append(String.format("%s", romNameActual));
 
         //ROM version
         TextView romVersion = (TextView) findViewById(R.id.tv_main_rom_version);
         String romVersionActual = Utils.getProp(OTA_VERSION);
-        romVersion.setText(String.format("%s", romVersionActual));
+        romVersion.append(String.format("%s", romVersionActual));
 
         //ROM date
         TextView romDate = (TextView) findViewById(R.id.tv_main_rom_date);
         String romDateActual = Utils.getProp("ro.build.date");
-        romDate.setText(String.format("%s", romDateActual));
+        romDate.append(String.format("%s", romDateActual));
 
         //ROM android version
         TextView romAndroid = (TextView) findViewById(R.id.tv_main_android_version);
         String romAndroidActual = Utils.getProp("ro.build.version.release");
-        romAndroid.setText(String.format("%s", romAndroidActual));
+        romAndroid.append(String.format("%s", romAndroidActual));
 
         //ROM developer
         TextView romDeveloper = (TextView) findViewById(R.id.tv_main_rom_developer);

@@ -29,10 +29,7 @@
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
     <string name="delete">Delete</string>
-    <string name="back">Back</string>
-    <string name="help">Help</string>
     <string name="loading">Loading&#8230;</string>
-    <string name="filename_separator">-</string>
     <string name="download">Download</string>
     <string name="install">Install</string>
     <string name="downloading">Downloading&#8230;</string>

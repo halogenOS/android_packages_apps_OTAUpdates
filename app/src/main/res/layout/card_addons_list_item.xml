@@ -70,7 +70,6 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/addon_links_box"
             style="?android:attr/buttonBarStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
