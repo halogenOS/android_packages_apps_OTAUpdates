@@ -344,29 +344,29 @@ public class MainActivity extends Activity implements Constants{
         //ROM name
         TextView romName = (TextView) findViewById(R.id.tv_main_rom_name);
         String romNameActual = Utils.getProp(OTA_ROMNAME);
-        romName.append(String.format("%s", romNameActual));
+        romName.setText(getString(R.string.main_rom_name) + romNameActual);
 
         //ROM version
         TextView romVersion = (TextView) findViewById(R.id.tv_main_rom_version);
         String romVersionActual = Utils.getProp(OTA_VERSION);
-        romVersion.append(String.format("%s", romVersionActual));
+        romVersion.setText(getString(R.string.main_rom_version) + romVersionActual);
 
         //ROM date
         TextView romDate = (TextView) findViewById(R.id.tv_main_rom_date);
         String romDateActual = Utils.getProp("ro.build.date");
-        romDate.append(String.format("%s", romDateActual));
+        romDate.setText(getString(R.string.main_rom_build_date) + romDateActual);
 
         //ROM android version
         TextView romAndroid = (TextView) findViewById(R.id.tv_main_android_version);
         String romAndroidActual = Utils.getProp("ro.build.version.release");
-        romAndroid.append(String.format("%s", romAndroidActual));
+        romAndroid.setText(getString(R.string.main_rom_developer) + romAndroidActual);
 
         //ROM developer
         TextView romDeveloper = (TextView) findViewById(R.id.tv_main_rom_developer);
         boolean showDevName = !RomUpdate.getDeveloper(this).equals("null");
         romDeveloper.setVisibility(showDevName? View.VISIBLE : View.GONE);
         String romDeveloperActual = RomUpdate.getDeveloper(this);
-        romDeveloper.setText(String.format("%s", romDeveloperActual));
+        romDeveloper.setText(getString(R.string.main_rom_developer) + romDeveloperActual);
 
     }
 
