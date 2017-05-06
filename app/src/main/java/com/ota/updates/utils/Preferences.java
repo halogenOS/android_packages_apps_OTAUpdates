@@ -48,11 +48,11 @@ public class Preferences implements Constants{
     }
 
     public static boolean getWipeCache(Context context) {
-        return getPrefs(context).getBoolean(WIPE_CACHE, true);
+        return getPrefs(context).getBoolean(WIPE_CACHE, false);
     }
 
     public static boolean getWipeDalvik(Context context) {
-        return getPrefs(context).getBoolean(WIPE_DALVIK, true);
+        return getPrefs(context).getBoolean(WIPE_DALVIK, false);
     }
 
     public static boolean getMD5Passed(Context context) {
