@@ -359,7 +359,7 @@ public class MainActivity extends Activity implements Constants{
         //ROM android version
         TextView romAndroid = (TextView) findViewById(R.id.tv_main_android_version);
         String romAndroidActual = Utils.getProp("ro.build.version.release");
-        romAndroid.setText(getString(R.string.main_rom_developer) + romAndroidActual);
+        romAndroid.setText(getString(R.string.main_android_version) + romAndroidActual);
 
         //ROM developer
         TextView romDeveloper = (TextView) findViewById(R.id.tv_main_rom_developer);
