@@ -30,12 +30,12 @@ import com.ota.updates.utils.Preferences;
 import java.util.Arrays;
 
 public class DownloadRomProgress  extends AsyncTask<Long, Integer, Void> implements Constants {
-    
+
     public final String TAG = this.getClass().getSimpleName();
 
     private Context mContext;
     private DownloadManager mDownloadManager;
-    
+
     public DownloadRomProgress(Context context, DownloadManager downloadManager) {
         mContext = context;
         mDownloadManager = downloadManager;
@@ -62,12 +62,12 @@ public class DownloadRomProgress  extends AsyncTask<Long, Integer, Void> impleme
                 }
 
                 final int progressPercent = (int) ((bytesDownloaded * 100L) / bytesInTotal);
-                
+
                 if (progressPercent != previousValue) {
                     // Only publish every 1%, to reduce the amount of work being done.
                     publishProgress(progressPercent, bytesDownloaded, bytesInTotal);
                     previousValue = progressPercent;
-                } 
+                }
             } catch (CursorIndexOutOfBoundsException e) {
                 Preferences.setIsDownloadRunning(mContext, false);
             } catch (ArithmeticException e) {
@@ -78,7 +78,7 @@ public class DownloadRomProgress  extends AsyncTask<Long, Integer, Void> impleme
         }
         return null;
     }
-    
+
     protected void onProgressUpdate(Integer... progress) {
         if (DEBUGGING)
             Log.d(TAG, "Updating Progress - " + progress[0] + "%");
