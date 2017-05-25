@@ -19,8 +19,6 @@
 <resources>
 
     <string name="preferences_name">Impostazioni</string>
-    <string name="list_summary" translatable="false">%s</string>
-    <string name="twrp_ors_cat" translatable="false">OpenRecoveryScript</string>
     <string name="twrp_ors_title">Abilita OpenRecoveryScript</string>
     <string name="twrp_ors_summary">Funziona su recovery TWRP ed alcune CWM modificate (non ufficiali)</string>
     <string name="twrp_ors_information">Permette a questa app di eseguire il flash del file via recovery senza alcuna interazione dell\'utente. Basta premere installa e attendere il completamento.</string>
