@@ -204,7 +204,7 @@ namespace Bypass {
 		handleBlock(LIST, ob, text, flags);
 	}
 
-	void Parser::parsedListItem(struct buf *ob, struct buf *text, int flags) {
+	void Parser::parsedListItem(struct buf *ob, struct buf *text, int) {
 		handleBlock(LIST_ITEM, ob, text);
 	}
 
@@ -336,7 +336,7 @@ namespace Bypass {
 		return 1;
 	}
 
-	int Parser::parsedAutolink(struct buf *ob, struct buf *link, enum mkd_autolink type) {
+	int Parser::parsedAutolink(struct buf *ob, struct buf *link, enum mkd_autolink) {
 		handleNontextSpan(AUTOLINK, ob, link);
 		return 1;
 	}

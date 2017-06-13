@@ -48,7 +48,7 @@ jobject recurseElement(JNIEnv *env, Bypass::Element element, jobject parent) {
 }
 
 JNIEXPORT jobject JNICALL Java_in_uncod_android_bypass_Bypass_processMarkdown
-  (JNIEnv *env, jobject o, jstring markdown) {
+  (JNIEnv *env, jobject, jstring markdown) {
 
 	const char* str;
 	str = env->GetStringUTFChars(markdown, NULL);
