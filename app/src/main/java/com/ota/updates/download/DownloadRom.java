@@ -51,7 +51,8 @@ public class DownloadRom implements Constants {
             request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI);
         }
 
-        request.setTitle("halogenOS OTA Update");
+        request.setTitle(context.getResources()
+                            .getString(R.string.notif_ota_downloading_title);
         request.setDescription(description);
 
         request.setVisibleInDownloadsUi(true);
