@@ -52,7 +52,7 @@ public class DownloadRom implements Constants {
         }
 
         request.setTitle(context.getResources()
-                            .getString(R.string.notif_ota_downloading_title);
+                            .getString(R.string.notif_ota_downloading_title));
         request.setDescription(description);
 
         request.setVisibleInDownloadsUi(true);
