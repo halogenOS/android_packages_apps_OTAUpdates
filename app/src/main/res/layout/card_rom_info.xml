@@ -73,7 +73,7 @@
             android:id="@+id/tv_main_rom_developer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/main_rom_developer"
+            android:text="@string/main_rom_maintainer"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="?attr/textColorSecondary" />
     </LinearLayout>

@@ -343,30 +343,35 @@ public class MainActivity extends Activity implements Constants{
 
         //ROM name
         TextView romName = (TextView) findViewById(R.id.tv_main_rom_name);
-        String romNameActual = Utils.getProp(OTA_ROMNAME);
-        romName.setText(getString(R.string.main_rom_name) + romNameActual);
+        String romNameActual;
+        try {
+            romNameActual =  Utils.getProp(OTA_ROMNAME).split("_")[1];
+        }catch (IndexOutOfBoundsException exc){
+            romNameActual = Utils.getProp(OTA_ROMNAME);
+        }
+        romName.setText(String.format(getString(R.string.main_rom_device), romNameActual));
 
         //ROM version
         TextView romVersion = (TextView) findViewById(R.id.tv_main_rom_version);
         String romVersionActual = Utils.getProp(OTA_VERSION);
-        romVersion.setText(getString(R.string.main_rom_version) + romVersionActual);
+        romVersion.setText(String.format(getString(R.string.main_rom_version), romVersionActual));
 
         //ROM date
         TextView romDate = (TextView) findViewById(R.id.tv_main_rom_date);
         String romDateActual = Utils.getProp("ro.build.date");
-        romDate.setText(getString(R.string.main_rom_build_date) + romDateActual);
+        romDate.setText(String.format(getString(R.string.main_rom_build_date), romDateActual));
 
         //ROM android version
         TextView romAndroid = (TextView) findViewById(R.id.tv_main_android_version);
         String romAndroidActual = Utils.getProp("ro.build.version.release");
-        romAndroid.setText(getString(R.string.main_android_version) + romAndroidActual);
+        romAndroid.setText(String.format(getString(R.string.main_android_version), romAndroidActual));
 
-        //ROM developer
+        //ROM Maintainer
         TextView romDeveloper = (TextView) findViewById(R.id.tv_main_rom_developer);
         boolean showDevName = !RomUpdate.getDeveloper(this).equals("null");
         romDeveloper.setVisibility(showDevName? View.VISIBLE : View.GONE);
         String romDeveloperActual = RomUpdate.getDeveloper(this);
-        romDeveloper.setText(getString(R.string.main_rom_developer) + romDeveloperActual);
+        romDeveloper.setText(String.format(getString(R.string.main_rom_maintainer), romDeveloperActual));
 
     }
 
@@ -389,7 +394,7 @@ public class MainActivity extends Activity implements Constants{
         boolean payPalLinkAvailable = RomUpdate.getDonateLink(mContext).trim().equals("null");
         if (!payPalLinkAvailable) {
             mDonateDialog.show();
-        } else if (payPalLinkAvailable) {
+        } else {
             String url = RomUpdate.getDonateLink(mContext);
             if (url != null){
                 final Uri uri = Uri.parse(url);
@@ -435,12 +440,6 @@ public class MainActivity extends Activity implements Constants{
         String title = getResources().getString(R.string.changelog);
         String changelog = getResources().getString(R.string.changelog_url);
         new Changelog(this, mContext, title, changelog, true).execute();
-    }
-
-    public void updateProgress(int progress) {
-        if(mProgressBar != null) {
-            mProgressBar.setProgress(progress);
-        }
     }
 
     private class CompatibilityTask extends AsyncTask<Void, Boolean, Boolean> implements Constants{

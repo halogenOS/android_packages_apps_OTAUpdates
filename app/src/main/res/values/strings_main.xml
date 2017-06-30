@@ -35,11 +35,11 @@
 
     <!-- ROM Information -->
     <string name="main_rom_information">ROM information</string>
-    <string name="main_rom_name">ROM name: </string>
-    <string name="main_rom_version">ROM version: </string>
-    <string name="main_rom_build_date">ROM date: </string>
-    <string name="main_rom_developer">Developer(s): </string>
-    <string name="main_android_version">Android version: </string>
+    <string name="main_rom_device">Device: %s</string>
+    <string name="main_rom_version">ROM version: %s </string>
+    <string name="main_rom_build_date">ROM date: %s</string>
+    <string name="main_rom_maintainer">Maintainer(s): %s</string>
+    <string name="main_android_version">Android version: %s</string>
 
     <!-- Dialogs -->
     <string name="main_not_compatible_title">Not compatible</string>
