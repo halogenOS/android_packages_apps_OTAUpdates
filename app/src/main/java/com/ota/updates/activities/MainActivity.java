@@ -166,6 +166,9 @@ public class MainActivity extends Activity implements Constants{
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
             switch (item.getItemId()) {
+            case R.id.menu_changelog:
+                openChangelog(null);
+                return true;
             case R.id.menu_settings:
                 openSettings(null);
                 return true;

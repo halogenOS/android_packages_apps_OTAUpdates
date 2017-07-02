@@ -19,5 +19,6 @@
 
     <!-- Menu Main -->
     <string name="menu_settings">Settings</string>
+    <string name="menu_changelog">Changelog</string>
 
 </resources>
