@@ -19,11 +19,9 @@ package com.ota.updates.utils;
 
 import android.os.Environment;
 
-import com.ota.updates.BuildConfig;
-
 public interface Constants {
     // Developer
-    boolean DEBUGGING                           = BuildConfig.DEBUG;
+    boolean DEBUGGING                       = false;
 
     // Props
     String OTA_ROMNAME                      = "persist.ota.romname";
