@@ -41,7 +41,7 @@
             android:id="@+id/tv_main_rom_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/main_rom_name"
+            android:text="@string/main_rom_device"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="?attr/textColorSecondary" />
 

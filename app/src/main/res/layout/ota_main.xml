@@ -14,27 +14,40 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 -->
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:scrollbars="vertical" >
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <Toolbar
+        android:id="@+id/toolbar_main"
         android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/Theme.RagnarDark" />
+
+    <ScrollView
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:scrollbars="vertical" >
 
-        <include layout="@layout/card_update" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
-        <include layout="@layout/card_no_update" />
+            <include layout="@layout/card_update" />
 
-        <include layout="@layout/card_addons" />
+            <include layout="@layout/card_no_update" />
 
-        <include layout="@layout/card_website" />
+            <include layout="@layout/card_addons" />
 
-        <include layout="@layout/card_donate" />
+            <include layout="@layout/card_website" />
 
-        <include layout="@layout/card_rom_info" />
-    </LinearLayout>
+            <include layout="@layout/card_donate" />
 
-</ScrollView>
+            <include layout="@layout/card_rom_info" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

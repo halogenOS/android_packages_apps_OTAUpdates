@@ -14,7 +14,24 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 -->
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <Toolbar
+        android:id="@+id/toolbar_about"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/Theme.RagnarDark" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@drawable/toolbar_dropshadow" />
+
+    <ScrollView
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:scrollbars="vertical" >
@@ -29,6 +46,6 @@
         <include layout="@layout/card_changelog" />
 
         <include layout="@layout/card_credits" />
-
-    </LinearLayout>
-</ScrollView>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
