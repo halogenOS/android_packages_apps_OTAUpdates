@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.SystemProperties;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationCompat.Builder;
 import android.support.v4.app.TaskStackBuilder;
@@ -36,12 +37,10 @@ import com.ota.updates.activities.AvailableActivity;
 import com.ota.updates.activities.MainActivity;
 import com.ota.updates.receivers.AppReceiver;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 import java.util.Calendar;
+import java.util.Objects;
 
 public class Utils implements Constants{
 
@@ -59,47 +58,11 @@ public class Utils implements Constants{
     }
 
     public static Boolean doesPropExist(String propName) {
-        boolean valid = false;
-
-        if (DEBUGGING) {
-            return true;
-        }
-
-        try {
-            Process process = Runtime.getRuntime().exec("getprop");
-            BufferedReader bufferedReader = new BufferedReader(
-                    new InputStreamReader(process.getInputStream()));
-
-            String line;
-            while ((line = bufferedReader.readLine()) != null)
-            {
-                if (line.contains("[" + propName +"]")) {
-                    valid = true;
-                }
-            }
-            bufferedReader.close();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        return valid;
+        return !Objects.equals(SystemProperties.get(propName), "");
     }
 
     public static String getProp(String propName) {
-        Process p;
-        String result = "";
-        try {
-            p = new ProcessBuilder("/system/bin/getprop", propName).redirectErrorStream(true).start();
-            BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            String line;
-            while ((line=br.readLine()) != null) {
-                result = line;
-            }
-            br.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return result;
+        return SystemProperties.get(propName);
     }
 
     public static String formatDataFromBytes(long size) {
@@ -117,8 +80,8 @@ public class Utils implements Constants{
         return decimalFormat.format(size / (float)GB) + 'G' + symbol;
     }
 
-    public static void deleteFile(File file) {
-        file.delete();
+    public static boolean deleteFile(File file) {
+        return file.delete();
     }
 
     public static void setHasFileDownloaded(Context context) {
@@ -162,11 +125,7 @@ public class Utils implements Constants{
         } else {
             int requestedInterval;
 
-            if (DEBUG_NOTIFICATIONS) {
-                requestedInterval = 30000;
-            } else {
-                requestedInterval = Preferences.getBackgroundFrequency(context);
-            }
+            requestedInterval = Preferences.getBackgroundFrequency(context);
 
             if (DEBUGGING)
                 Log.d(TAG, "Setting alarm for " + requestedInterval + " seconds");
@@ -241,7 +200,7 @@ public class Utils implements Constants{
 
         boolean available;
         available = !Preferences.getIgnoredRelease(context).matches(manifestVer)
-                && (DEBUG_NOTIFICATIONS || versionBiggerThan(currentVer, manifestVer));
+                && versionBiggerThan(currentVer, manifestVer);
 
         RomUpdate.setUpdateAvailable(context, available);
         if (DEBUGGING)

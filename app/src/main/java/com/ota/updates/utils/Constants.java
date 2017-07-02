@@ -19,17 +19,17 @@ package com.ota.updates.utils;
 
 import android.os.Environment;
 
+import com.ota.updates.BuildConfig;
+
 public interface Constants {
     // Developer
-    boolean DEBUGGING                           = false;
-    boolean DEBUG_NOTIFICATIONS                 = false;
+    boolean DEBUGGING                           = BuildConfig.DEBUG;
 
     // Props
     String OTA_ROMNAME                      = "persist.ota.romname";
     String OTA_VERSION                      = "persist.ota.version";
     String OTA_MANIFEST                     = "persist.ota.manifest";
     String OTA_DOWNLOAD_LOC                 = "persist.ota.download_loc";
-    String OTA_DEFAULT_THEME                = "persist.ota.default_theme";
 
     // Storage
     String SD_CARD                          = Environment.getExternalStorageDirectory().getAbsolutePath();
