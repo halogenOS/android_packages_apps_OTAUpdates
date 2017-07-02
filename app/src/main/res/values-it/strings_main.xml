@@ -36,15 +36,17 @@
 
     <!-- ROM Information -->
     <string name="main_rom_information">Informazioni sulla ROM</string>
-    <string name="main_rom_name">Nome ROM: </string>
-    <string name="main_rom_version">Versione ROM: </string>
-    <string name="main_rom_build_date">Data ROM: </string>
-    <string name="main_rom_developer">Sviluppatore/i: </string>
-    <string name="main_android_version">Versione di Android: </string>
+    <string name="main_rom_device">Nome Dispositivo: %s</string>
+    <string name="main_rom_version">Versione ROM: %s</string>
+    <string name="main_rom_build_date">Data ROM: %s</string>
+    <string name="main_rom_maintainer">Manutentore: %s</string>
+    <string name="main_android_version">Versione di Android: %s</string>
 
     <!-- Dialogs -->
     <string name="main_not_compatible_title">Non compatibile</string>
-    <string name="main_not_compatible_message">Questa ROM non è compatibile coin OTA Updates. Contatta lo sviluppatore della tua ROM. Questa app richiede una ROM modificata in cui lo sviluppatore abbia abilitato esplicitamente implementato il supporto. Non votare 1 stella per questo motivo. Questo non è un difetto.</string>
+    <string name="main_not_compatible_message">Questa ROM non è compatibile con GLI aggiornamenti OTA.
+        Contatta lo sviluppatore della tua ROM. Questa app richiede una ROM modificata in cui lo sviluppatore
+        abbia abilitato esplicitamente il supporto. Non votare 1 stella per questo motivo. Questo non è un difetto.</string>
     <string name="main_not_connected_title">Non connesso</string>
     <string name="main_not_connected_message">Attualmente non sei connesso ad alcuna rete. Abilita la rete cellulare o WiFi e riprova.</string>
     <string name="main_playstore_title">BitCoin</string>
