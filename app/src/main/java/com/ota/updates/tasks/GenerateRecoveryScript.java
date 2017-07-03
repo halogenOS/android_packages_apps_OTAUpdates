@@ -28,9 +28,10 @@ import com.ota.updates.utils.Constants;
 import com.ota.updates.utils.Preferences;
 import com.ota.updates.utils.Tools;
 
+import java.io.BufferedWriter;
 import java.io.File;
-
-import static com.ota.updates.utils.Tools.canWriteORSWithoutRoot;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class GenerateRecoveryScript extends AsyncTask<Void, String, Boolean> implements Constants {
 
@@ -121,17 +122,25 @@ public class GenerateRecoveryScript extends AsyncTask<Void, String, Boolean> imp
     protected Boolean doInBackground(Void... params) {
 
         // If not 0, then permission was denied
-        String SCRIPT_FILE = "/cache/recovery/openrecoveryscript";
-        if(!canWriteORSWithoutRoot()) {
-            // Run as root
-            Tools.shell("mkdir -p /cache/recovery/; echo $?", true);
-            Tools.shell("echo \"" + mScriptOutput + "\" > " + SCRIPT_FILE + "\n", true);
-        } else {
-            // Permission was enabled, run without roo
-            Tools.shell("echo \"" + mScriptOutput + "\" > " + SCRIPT_FILE + "\n", false);
+        boolean orsWrittenToCache = false;
+        File orsDir = new File("/cache/recovery");
+        File orsFile = new File("/cache/recovery/openrecoveryscript");
+        if (!orsDir.exists()){
+            try {
+                orsWrittenToCache = orsDir.createNewFile();
+                if (!orsFile.exists()){
+                    orsWrittenToCache = orsFile.createNewFile();
+                    FileWriter fileWriter = new FileWriter(orsFile);
+                    BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+                    bufferedWriter.write(String.format("\" %s \" \n", mScriptOutput));
+                    bufferedWriter.flush();
+                    bufferedWriter.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-
-        return true;
+        return orsWrittenToCache;
     }
     @Override
     protected void onPostExecute(Boolean value) {

@@ -51,7 +51,11 @@ import com.ota.updates.utils.Preferences;
 import com.ota.updates.utils.Tools;
 import com.ota.updates.utils.Utils;
 
+import java.io.File;
+
 import in.uncod.android.bypass.Bypass;
+
+import static com.ota.updates.utils.MD5.checkMD5;
 
 public class AvailableActivity extends Activity implements Constants, android.view.View.OnClickListener {
 
@@ -63,7 +67,6 @@ public class AvailableActivity extends Activity implements Constants, android.vi
 
     private Builder mDeleteDialog;
     private Builder mRebootDialog;
-    private Builder mRebootManualDialog;
     private Builder mNetworkDialog;
 
     private Button mCheckMD5Button;
@@ -113,7 +116,8 @@ public class AvailableActivity extends Activity implements Constants, android.vi
             // Then start updating the progress bar again
             if (DEBUGGING)
                 Log.d(TAG, "Starting progress updater");
-            DownloadManager downloadManager = (DownloadManager) mContext.getSystemService(Context.DOWNLOAD_SERVICE);
+            DownloadManager downloadManager = (DownloadManager)
+                mContext.getSystemService(Context.DOWNLOAD_SERVICE);
             new DownloadRomProgress(mContext, downloadManager).execute();
         }
     }
@@ -146,11 +150,7 @@ public class AvailableActivity extends Activity implements Constants, android.vi
             invalidateOptionsMenu();
             return true;
         case R.id.menu_available_install:
-            if (!Tools.isRootAvailable()) {
-                mRebootManualDialog.show();
-            } else {
-                mRebootDialog.show();
-            }
+            mRebootDialog.show();
             return true;
         default:
             return super.onOptionsItemSelected(item);
@@ -227,11 +227,7 @@ public class AvailableActivity extends Activity implements Constants, android.vi
             mDeleteDialog.show();
             break;
         case R.id.menu_available_install:
-            if (!Tools.isRootAvailable()) {
-                mRebootManualDialog.show();
-            } else {
-                mRebootDialog.show();
-            }
+            mRebootDialog.show();
             break;
         case R.id.menu_available_download:
             download();
@@ -283,7 +279,9 @@ public class AvailableActivity extends Activity implements Constants, android.vi
                 if (Preferences.getORSEnabled(mContext)) {
                     new GenerateRecoveryScript(mContext).execute();
                 } else {
-                    Tools.recovery(mContext);
+                    if (!Tools.recovery(mContext)) {
+                        Toast.makeText(mContext, R.string.reboot_failed, Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         }).setNegativeButton(R.string.cancel, null);
@@ -300,11 +298,6 @@ public class AvailableActivity extends Activity implements Constants, android.vi
                 mContext.startActivity(intent);
             }
         });
-
-        mRebootManualDialog = new AlertDialog.Builder(mContext);
-        mRebootManualDialog.setTitle(R.string.available_reboot_manual_title)
-        .setMessage(R.string.available_reboot_manual_message)
-        .setPositiveButton(R.string.cancel, null);
     }
 
     public void setupMenuToolbar(Context context) {
@@ -489,12 +482,10 @@ public class AvailableActivity extends Activity implements Constants, android.vi
 
         @Override
         protected Boolean doInBackground(Object... params) {
-            String file = RomUpdate.getFullFile(mContext).getAbsolutePath(); // Full file, with path
-            String md5Remote = RomUpdate.getMd5(mContext); // Remote MD5 form the manifest. This is what we expect it to be
-            String md5Local = Tools.shell("md5sum " + file + " | cut -d ' ' -f 1", false); // Run the check on our local file
-            md5Local = md5Local.trim(); // Trim both to remove any whitespace
+            String file = RomUpdate.getFullFile(mContext).getAbsolutePath();
+            String md5Remote = RomUpdate.getMd5(mContext);
             md5Remote = md5Remote.trim();
-            return md5Local.equalsIgnoreCase(md5Remote); // Return the comparison
+            return checkMD5(md5Remote, new File(file));
         }
 
         @Override

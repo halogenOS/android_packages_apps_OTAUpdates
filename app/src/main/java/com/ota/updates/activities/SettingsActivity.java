@@ -43,7 +43,6 @@ import android.util.SparseBooleanArray;
 import com.ota.updates.R;
 import com.ota.updates.utils.Constants;
 import com.ota.updates.utils.Preferences;
-import com.ota.updates.utils.Tools;
 import com.ota.updates.utils.Utils;
 
 import java.io.File;
@@ -83,11 +82,6 @@ public class SettingsActivity extends PreferenceActivity implements OnPreference
         String defValue = android.provider.Settings.System.DEFAULT_NOTIFICATION_URI.toString();
         String soundValue = getPreferenceManager().getSharedPreferences().getString(NOTIFICATIONS_SOUND, defValue);
         setRingtoneSummary(soundValue);
-
-        if (!Tools.canWriteORSWithoutRoot()) {
-            SwitchPreference ors = (SwitchPreference) findPreference("updater_twrp_ors");
-            ors.setEnabled(false);
-        }
 
         mIgnoredRelease = (SwitchPreference) findPreference(NOTIFICATIONS_IGNORED_RELEASE);
         mIgnoredRelease.setOnPreferenceChangeListener(this);
