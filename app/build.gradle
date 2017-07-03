@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 26
     buildToolsVersion "26.0.0"
 
     defaultConfig {
         applicationId "com.ota.updates"
         minSdkVersion 25
-        targetSdkVersion 25
+        targetSdkVersion 26
     }
 
     buildTypes {
@@ -24,7 +24,7 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:25.2.0'
-    compile 'com.android.support:cardview-v7:25.2.0'
+    compile 'com.android.support:support-v4:26.0.0'
+    compile 'com.android.support:cardview-v7:26.0.0'
     compile files('libs/RootTools.jar')
 }

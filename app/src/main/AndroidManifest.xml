@@ -22,9 +22,9 @@
     android:sharedUserId="android.uid.system" >
 
     <uses-sdk
-        android:maxSdkVersion="25"
+        android:maxSdkVersion="26"
         android:minSdkVersion="25"
-        android:targetSdkVersion="25" />
+        android:targetSdkVersion="26" />
 
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
