@@ -97,8 +97,6 @@ public class AboutActivity extends Activity {
         returnedArray.add(new CreditsItem("Matthew Booth","Anything not mentioned below"));
                 returnedArray.add(new CreditsItem("Harsh Shandilya","Nougat bringup and code cleanup"));
                 returnedArray.add(new CreditsItem("Roman Nurik","Android Asset Studio Framework"));
-                // TODO: Use libsuperuser for root functions or simply eliminate root usage
-                returnedArray.add(new CreditsItem("Ficeto (AllianceROM)","Root Tools"));
                 returnedArray.add(new CreditsItem("StackOverflow","Many many people"));
 
         return returnedArray;
