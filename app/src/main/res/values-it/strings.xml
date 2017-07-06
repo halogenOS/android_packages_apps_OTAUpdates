@@ -38,6 +38,5 @@
     <string name="settings">Impostazioni</string>
     <string name="done">Fatto</string>
     <string name="delete_confirm">Sei sicuro di voler eliminare questo file?</string>
-    <string name="reboot_without_root_failed">Errore durante il tentativo di riavvio in recovery senza root</string>
 
 </resources>

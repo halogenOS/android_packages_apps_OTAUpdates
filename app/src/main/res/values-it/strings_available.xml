@@ -31,8 +31,6 @@
     <string name="available_delete_confirm_message">Sei sicuro di voler eliminare il file scaricato?</string>
     <string name="available_reboot_confirm">Vuoi riavviare adesso?</string>
     <string name="available_url_error">Errore URL: Contatta lo sviluppatore della ROM</string>
-    <string name="available_reboot_manual_title">Riavvia ora</string>
-    <string name="available_reboot_manual_message">Per favore, riavvia in recovery ed esegui il flash della ROM.\n\nPuoi trovarla in /sdcard/Downloads</string>
     <string name="available_wrong_network_title">Rete selezionata errata</string>
     <string name="available_wrong_network_message">Stai cercando di scaricare attraverso la rete cellulare, ma nelle impostazioni è attualmente consentito solo il Wi-Fi. Aggiorna le impostazioni di conseguenza.</string>
 

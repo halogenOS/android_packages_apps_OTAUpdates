@@ -18,12 +18,9 @@
 <resources>
 
     <!-- Palette colors for Material UI -->
-    <color name="white">#FFFFFFFF</color>
     <color name="material_primary">@color/material_blue_grey_900</color>
     <color name="material_primary_dark">@color/material_blue_grey_950</color>
-    <color name="accent_material_light">@color/material_deep_teal_500</color>
     <color name="accent_material_dark">@color/material_deep_teal_200</color>
-    <color name="material_deep_teal_500">#ff009688</color>
     <color name="material_deep_teal_200">#ff80cbc4</color>
     <color name="material_red_500">#fff44336</color>
     <color name="material_blue_grey_800">#ff37474f</color>
@@ -32,14 +29,9 @@
     <color name="material_light_green_500">#ff8bC34a</color>
     <color name="material_background_dark">#1f292f</color>
     <color name="card_background_material_dark">@color/material_blue_grey_800</color>
-    <color name="card_background_material_light">@color/white</color>
-    <color name="primary_text_material_light">#de000000</color>
-    <color name="secondary_text_material_light">#8a000000</color>
     <color name="primary_text_material_dark">#ffffffff</color>
     <color name="secondary_text_material_dark">#b3ffffff</color>
     <color name="ripple_material_dark">#40ffffff</color>
-    <color name="ripple_material_light">#40000000</color>
     <color name="separator_dark">#ff333333</color>
-    <color name="separator_light">#ffdddddd</color>
 
 </resources>
