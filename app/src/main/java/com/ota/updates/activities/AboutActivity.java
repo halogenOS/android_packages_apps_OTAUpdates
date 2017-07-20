@@ -63,14 +63,7 @@ public class AboutActivity extends Activity {
                                 //pass
                             }
                         })
-                        .setNeutralButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.cancel();
-                            }
-                        })
-                        .setTitle(R.string.about_credits_title)
-                        .setCancelable(false)
+                        .setCancelable(true)
                         .show();
             }
         });

@@ -56,7 +56,7 @@ public class CreditsAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null) {
-            convertView = layoutInflater.inflate(R.layout.card_credits, null);
+            convertView = layoutInflater.inflate(R.layout.card_contributors, null);
             holder = new ViewHolder();
             holder.devName = (TextView) convertView.findViewById(R.id.about_tv_credits_title);
             holder.devCredit = (TextView) convertView.findViewById(R.id.about_tv_credits_summary);
