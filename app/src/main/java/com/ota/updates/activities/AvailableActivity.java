@@ -197,10 +197,10 @@ public class AvailableActivity extends Activity implements Constants, android.vi
                 if (md5HasRun && md5Passed) {
                     md5MenuItem.setEnabled(false);
                     md5MenuItem.setTitle(R.string.available_md5_ok);
-                } else if (md5HasRun && !md5Passed) {
+                } else if (md5HasRun) {
                     md5MenuItem.setEnabled(false);
                     md5MenuItem.setTitle(R.string.available_md5_failed);
-                } else  if (!md5HasRun) {
+                } else {
                     md5MenuItem.setEnabled(true);
                 }
             } else {
@@ -328,10 +328,10 @@ public class AvailableActivity extends Activity implements Constants, android.vi
                 if (md5HasRun && md5Passed) {
                     mCheckMD5Button.setEnabled(false);
                     mCheckMD5Button.setText(R.string.available_md5_ok);
-                } else if (md5HasRun && !md5Passed) {
+                } else if (md5HasRun) {
                     mCheckMD5Button.setEnabled(false);
                     mCheckMD5Button.setText(R.string.available_md5_failed);
-                } else if (!md5HasRun) {
+                } else {
                     mCheckMD5Button.setEnabled(true);
                 }
             } else {
@@ -377,7 +377,7 @@ public class AvailableActivity extends Activity implements Constants, android.vi
         if (md5.equals("null")) {
             md5Text.setText(String.format("%s N/A", md5Prefix));
         } else {
-            md5Text.setText(md5Prefix + " " + md5);
+            md5Text.setText(String.format("%s %s", md5Prefix, md5));
         }
     }
 
@@ -405,7 +405,7 @@ public class AvailableActivity extends Activity implements Constants, android.vi
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setData(Uri.parse(httpUrl));
                 startActivity(intent);
-            } else if (httpUrlEmpty || !directUrlEmpty) {
+            } else if (httpUrlEmpty) {
                 if (DEBUGGING)
                     Log.d(TAG, "Downloading via DownloadManager");
                 mDownloadRom.startDownload(mContext);
@@ -453,10 +453,9 @@ public class AvailableActivity extends Activity implements Constants, android.vi
 
     public void updateProgress(int progress, int downloaded, int total) {
         mProgressBar.setProgress(progress);
-        mProgressCounterText.setText(
-                Utils.formatDataFromBytes(downloaded) +
-                "/" +
-                Utils.formatDataFromBytes(total));
+        mProgressCounterText.setText(String.format("%s/%s",
+                Utils.formatDataFromBytes(downloaded),
+                Utils.formatDataFromBytes(total)));
     }
 
     private class MD5Check extends AsyncTask<Object, Boolean, Boolean>{
