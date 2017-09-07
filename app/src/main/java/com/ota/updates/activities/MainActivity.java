@@ -93,7 +93,7 @@ public class MainActivity extends Activity implements Constants{
 
         boolean firstRun = Preferences.getFirstRun(mContext);
         if(firstRun) {
-            Preferences.setFirstRun(mContext, false);
+            Preferences.setFirstRun(mContext);
             showWhatsNew();
         }
 
